@@ -21,7 +21,7 @@ Users can log out.
 ## Contributors
 
 | NO | FIRSTNAME | LASTNAME | GITHUB_PROFILE |
-|____|___________|__________|________________|
+|----|-----------|----------|----------------|
 | 1  | Gavin     | Schoew   | gavinschoew    |
 | 2  | Ryan      | Kerwick  | RyanKerwick    |
 | 3  | Elizabeth | Long     | frizzyliz      |
