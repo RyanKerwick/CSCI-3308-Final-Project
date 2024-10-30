@@ -2,8 +2,10 @@
 
 ## Application description
 Our website is an all-in-one platform for all things fashion. It will feature the following pages: Register, Login, Profile, Discover, Outfit Creator, Store Search, Logout.
-### Register: Users can create an account with a unique username and password.
-### Login: Users can login to their profile.
+### Register: 
+Users can create an account with a unique username and password.
+### Login: 
+Users can login to their profile.
 ### Profile: 
 Users can view their username, set and view their profile picture, and see the clothes they’ve wishlisted and outfits they’ve saved.
 ### Discover: 
@@ -19,6 +21,7 @@ Users can log out.
 ## Contributors
 
 | NO | FIRSTNAME | LASTNAME | GITHUB_PROFILE |
+|____|___________|__________|________________|
 | 1  | Gavin     | Schoew   | gavinschoew    |
 | 2  | Ryan      | Kerwick  | RyanKerwick    |
 | 3  | Elizabeth | Long     | frizzyliz      |
