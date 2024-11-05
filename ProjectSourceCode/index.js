@@ -179,4 +179,9 @@ async function getQuery(query, args){
 
 // starting the server
 module.exports = app.listen(3000);
+
+
+
+// starting the server
+app.listen(3000);
 console.log('Server is listening on port 3000');
