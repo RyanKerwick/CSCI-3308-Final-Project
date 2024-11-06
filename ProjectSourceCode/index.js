@@ -79,6 +79,7 @@ app.get('/login', (req, res) => {
 
 app.get('/register', (req, res) => {
   res.render('pages/register.hbs');
+<<<<<<< HEAD
 });
 
 // Register
@@ -191,6 +192,9 @@ async function getQuery(query, args){
 
 // starting the server
 module.exports = app.listen(3000);
+=======
+})
+>>>>>>> fb3bff6 (Maybe docker works this time)
 
 
 
