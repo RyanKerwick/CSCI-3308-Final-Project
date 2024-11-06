@@ -6,11 +6,7 @@ services:
       - '5432'
   web:
     image: node:lts
-<<<<<<< HEAD
-    user: 'root'
-=======
     user: 'node'
->>>>>>> fb3bff6 (Maybe docker works this time)
     working_dir: /ProjectSourceCode
     env_file: .env
     environment:
@@ -21,15 +17,6 @@ services:
       - '3000:3000'
     volumes:
       - ./:/ProjectSourceCode
-<<<<<<< HEAD
-    command: 
-      # for testing
-      'npm run testandrun'
-
-      # for functionality
-      # 'npm start'
-=======
     command: 'npm start'
->>>>>>> fb3bff6 (Maybe docker works this time)
 volumes:
   group-project:
