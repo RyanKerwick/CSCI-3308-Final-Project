@@ -1,16 +1,16 @@
-version: '3.9'
 services:
   db:
     image: postgres:14
     env_file: .env
     expose:
       - '5432'
-    volumes:
-      - group-project:/var/lib/postgresql/data
-      - ./src/init_data:/docker-entrypoint-initdb.d
   web:
     image: node:lts
+<<<<<<< HEAD
     user: 'root'
+=======
+    user: 'node'
+>>>>>>> fb3bff6 (Maybe docker works this time)
     working_dir: /ProjectSourceCode
     env_file: .env
     environment:
@@ -21,11 +21,15 @@ services:
       - '3000:3000'
     volumes:
       - ./:/ProjectSourceCode
+<<<<<<< HEAD
     command: 
       # for testing
       'npm run testandrun'
 
       # for functionality
       # 'npm start'
+=======
+    command: 'npm start'
+>>>>>>> fb3bff6 (Maybe docker works this time)
 volumes:
   group-project:
