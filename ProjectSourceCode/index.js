@@ -69,6 +69,17 @@ app.use(
 
 // API Routes go here
 
+app.get('/', (req, res) => {
+  res.redirect('/login');
+});
+
+app.get('/login', (req, res) => {
+  res.render('pages/login.hbs');
+});
+
+app.get('/register', (req, res) => {
+  res.render('pages/register.hbs');
+})
 
 
 
