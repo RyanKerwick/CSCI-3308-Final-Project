@@ -18,5 +18,27 @@
             </div>
         </div>
         <! Display cards >
+        <! Outline from events lab, will update with table data>
+        <div class="row">
+            {{#if results.length}}
+                {{#each results}}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{#if this.images.length}}{{this.images.[0].url}}{{else}}/resources/concerts.jpeg{{/if}}" class="card-img-top" alt="{{this.name}}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{this.name}}</h5>
+                            <p class="card-text">
+                                Date: {{this.dates.start.localDate}}<br>
+                                Time: {{this.dates.start.localTime}}
+                            </p>
+                            <a href="{{this.url}}" class="btn btn-primary">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            {{else}}
+                <p>No events found.</p>
+            {{/if}}
+        </div>
     </body>
 </html>
