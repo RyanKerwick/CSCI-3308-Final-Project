@@ -1,8 +1,8 @@
-INSERT INTO users (user_id, username, password, profile_img) VALUES
-(1, 'jessika25', 'password123','/user1img.jpg');
+INSERT INTO users (username, password, profile_img) VALUES
+('jessika25', 'password123','/user1img.jpg');
 
 INSERT INTO items (item_id, name, item_img, color, price, formality) VALUES
-(1, 'Nordstrom Rack Tuxedo Jacket', '/tuxedo.png', 'black', 149.99, "formal");
+(1, 'Nordstrom Rack Tuxedo Jacket', '/tuxedo.png', 'black', 149.99, 'formal');
 
 INSERT INTO wishlist (id_user, id_item) VALUES
 (1,1);

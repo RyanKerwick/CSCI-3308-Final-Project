@@ -10,8 +10,8 @@ services:
       - ./src/init_data:/docker-entrypoint-initdb.d
   web:
     image: node:lts
-    user: 'node'
-    working_dir: /repository
+    user: 'root'
+    working_dir: /ProjectSourceCode
     env_file: .env
     environment:
       - NODE_ENV=development
@@ -20,7 +20,7 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - ./:/repository
-    command: `npm run testandrun`
+      - ./:/ProjectSourceCode
+    command: 'npm run testandrun'
 volumes:
   group-project:
