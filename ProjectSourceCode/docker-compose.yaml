@@ -10,8 +10,8 @@ services:
       - ./src/init_data:/docker-entrypoint-initdb.d
   web:
     image: node:lts
-    user: 'root'
-    working_dir: /ProjectSourceCode
+    user: 'node'
+    working_dir: /repository
     env_file: .env
     environment:
       - NODE_ENV=development
