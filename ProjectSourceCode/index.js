@@ -109,16 +109,16 @@ app.post('/register', async (req, res) => {
   //hash the password using bcrypt library
   const hash = await bcrypt.hash(req.body.password, 10);
   
-  const query = 'INSERT INTO users (username, password) values ($1, $2)';
+  const query = 'INSERT INTO users (username, password) values ($1, $2) returning *';
   db.one(query, [req.body.username, hash])
       .then(() => {
-
-          res.status(200).json({message: "Success"}) 
+          res.status(200).json({message: 'Success'}) 
           // res.redirect('/login');
       })
       .catch(err => {
           console.log(err);
-          res.redirect('/register');
+          res.status(400).json({message: 'Invalid input'})
+          // res.redirect('/register');
       })
 
   // To-DO: Insert username and hashed password into the 'users' table

@@ -1,6 +1,6 @@
 {
     "name": "Clothing Site",
-    "main": "src/index.js",
+    "main": "./index",
     "dependencies": {
       "express": "^4.6.1",
       "pg-promise": "^10.11.1",
@@ -20,7 +20,7 @@
     },
     "scripts": {
       "prestart": "npm install",
-      "start": "nodemon index.js",
+      "start": "node index.js",
       "test": "mocha",
       "testandrun": "npm run prestart && npm run test && npm start"
     }
