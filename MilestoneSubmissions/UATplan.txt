@@ -1,0 +1,37 @@
+==Register==
+Test cases:
+    -Users cannot register without both username and password fields filled out
+    -Username and password must each be at least 5 characters
+Test data:
+    -None
+Test environment:
+    -Localhost
+Test results:
+    -Username and password are recorded in the users table
+
+==Login==
+Test cases:
+    -Users cannot login without both username and password fields filled out
+    -Users must provide the correct username and password
+Test data:
+    -Dummy user in insert.sql
+Test environment:
+    -Localhost
+Test results:
+    -User session is set
+
+==Discover==
+Test cases:
+    -Users can search items by name
+    -Users can toggle "color" filter to search for items
+    -Users can toggle "formality" filter to search
+    -Users can set a price range to search
+    -Users can add unlimited items to their wishlist
+Test data:
+    -Clothing data in insert.sql (pending creation as of 11/8/24)
+    -Dummy user in insert.sql
+Test environment:
+    -Localhost
+Test results:
+    -Searched items appear based on applied filters and name
+    -Wishlist items associated with user are updated in wishlist table
