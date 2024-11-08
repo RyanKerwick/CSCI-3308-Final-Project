@@ -10,6 +10,7 @@ chai.should();
 chai.use(chaiHttp);
 const {assert, expect} = chai;
 
+<<<<<<< HEAD
 
 describe('Server!', () => {
   // Sample test case given to test / endpoint.
@@ -79,11 +80,26 @@ describe('Testing Register API', () => {
       .end((err, res) => {
         expect(res).to.have.status(400);
         expect(res.body.message).to.equals('Invalid input');
+=======
+// ********************** DEFAULT WELCOME TESTCASE ****************************
+
+describe('Server!', () => {
+  // Sample test case given to test / endpoint.
+  it('Returns the default welcome message', done => {
+    chai
+      .request(server)
+      .get('/welcome')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body.status).to.equals('success');
+        assert.strictEqual(res.body.message, 'Welcome!');
+>>>>>>> 41e1c6a (Edited Login/Register pages, added logout page, testing folder, altered index.js, and yaml and json files)
         done();
       });
   });
 });
 
+<<<<<<< HEAD
 
 
 
@@ -139,4 +155,8 @@ describe('Testing Login API', () => {
       });
   });
 });
+=======
+// *********************** TODO: WRITE 2 UNIT TESTCASES **************************
+
+>>>>>>> 41e1c6a (Edited Login/Register pages, added logout page, testing folder, altered index.js, and yaml and json files)
 // ********************************************************************************

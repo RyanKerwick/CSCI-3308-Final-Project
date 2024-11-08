@@ -1,5 +1,5 @@
 {
-  "name": "clothingsite",
+  "name": "Clothing Site",
   "main": "./index",
   "dependencies": {
     "express": "^4.6.1",
