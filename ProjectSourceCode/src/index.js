@@ -78,6 +78,12 @@ app.use(
 
 // API Routes go here
 
+app.get('/welcome', (req, res) => {
+  res.json({status: 'success', message: 'Welcome!'});
+});
+
+
+
 app.get('/', (req, res) => {
   res.redirect('/login');
 });
@@ -253,4 +259,45 @@ async function populate_items(){
 // starting the server
 module.exports = app.listen(3000);
 
+
+app.post('/login', async (req, res) => {
+  // check if password from request matches with password in DB
+  const query = 'SELECT * FROM users where username = $1'
+  let user = await db.one(query, [req.body.username]);
+
+  const match = await bcrypt.compare(req.body.password, user.password);
+  if(!match){
+      res.render('pages/login.hbs', {message: "Incorrect username or password"});
+  }else{
+      //save user details in session like in lab 7
+      req.session.user = user;
+      req.session.save();
+      res.redirect('/discover');
+  }
+})
+
+// Register
+app.post('/register', async (req, res) => {
+  //hash the password using bcrypt library
+  const hash = await bcrypt.hash(req.body.password, 10);
+  
+  const query = 'INSERT INTO users (username, password) values ($1, $2)';
+  db.one(query, [req.body.username, hash])
+      .then(() => {
+          res.redirect('/login');
+      })
+      .catch(err => {
+          console.log(err);
+          res.redirect('/register');
+      })
+
+  // To-DO: Insert username and hashed password into the 'users' table
+});
+
+
+
+
+
+// starting the server
+module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
