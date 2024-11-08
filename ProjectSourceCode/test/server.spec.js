@@ -35,6 +35,7 @@ describe('Testing Register API', () => {
         done();
       });
   });
+});
 
 
   // Register Negative Testcase :
@@ -72,6 +73,7 @@ describe('Server!', () => {
 }),
 
 
+
 describe('Testing Login API', () => {
   // Login Positive Testcase :
   // API: /login
@@ -82,6 +84,21 @@ describe('Testing Login API', () => {
     chai
       .request(server)
       .post('/login')
+  });
+// Register Positive Testcase :
+// API: /register
+// Input: {username: 'John Doe', password: 'abcdefg'}
+// Expect: res.status == 200 and res.body.message == 'Success'
+// Result: This test case should pass and return a status 200 along with a "Success" message.
+// Explanation: The testcase will call the /register API with the following input
+// and expects the API to return a status of 200 along with the "Success" message.
+
+
+describe('Testing Register API', () => {
+  it('positive : /register', done => {
+    chai
+      .request(server)
+      .post('/register')
       .send({username: 'John Doe', password: 'abcdefg'})
       .end((err, res) => {
         expect(res).to.have.status(200);
@@ -89,6 +106,7 @@ describe('Testing Login API', () => {
         done();
       });
   });
+});
 
   // Login Negative Testcase :
   // API: /login
@@ -99,6 +117,20 @@ describe('Testing Login API', () => {
     chai
       .request(server)
       .post('/login')
+  
+
+  // Register Negative Testcase :
+  // API: /register
+  // Input: {username: 'John Doe'}
+  // Expect: res.status == 400 and res.body.message == 'Invalid input'
+  // Result: This test case should pass and return a status 400 along with a "Invalid input" message.
+  // Explanation: The testcase will call the /register API with the following invalid inputs
+  // and expects the API to return a status of 400 along with the "Invalid input" message.
+
+  it('Negative : /register. Checking invalid name', done => {
+    chai
+      .request(server)
+      .post('/register')
       .send({username: 'John Doe', password: 'abadaba'})
       .end((err, res) => {
         expect(res).to.have.status(400);
@@ -123,4 +155,4 @@ describe('Testing Login API', () => {
         done();
       });
   });
-}))})})
+  })}))})
