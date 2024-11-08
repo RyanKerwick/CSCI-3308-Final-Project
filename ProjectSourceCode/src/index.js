@@ -112,7 +112,9 @@ app.post('/register', async (req, res) => {
   const query = 'INSERT INTO users (username, password) values ($1, $2)';
   db.one(query, [req.body.username, hash])
       .then(() => {
-          res.redirect('/login');
+
+          res.status(200).json({message: "Success"}) 
+          // res.redirect('/login');
       })
       .catch(err => {
           console.log(err);
