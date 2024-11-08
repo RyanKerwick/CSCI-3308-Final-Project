@@ -10,35 +10,8 @@ chai.should();
 chai.use(chaiHttp);
 const {assert, expect} = chai;
 
-<<<<<<< HEAD
-
-describe('Server!', () => {
-  // Sample test case given to test / endpoint.
-  it('Returns the default welcome message', done => {
-    chai
-      .request(server)
-      .get('/welcome')
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body.status).to.equals('success');
-        assert.strictEqual(res.body.message, 'Welcome!');
-        done();
-      });
-  });
-});
-
-// *********************** TODO: WRITE 2 UNIT TESTCASES **************************
-
-// Register Positive Testcase :
-// API: /register
-// Input: {username: 'John Doe', password: 'abcdefg'}
-// Expect: res.status == 200 and res.body.message == 'Success'
-// Result: This test case should pass and return a status 200 along with a "Success" message.
-// Explanation: The testcase will call the /register API with the following input
-// and expects the API to return a status of 200 along with the "Success" message.
 
 // *********************** UNIT TESTCASES **************************
-
 
 
 describe('Testing Register API', () => {
@@ -80,26 +53,11 @@ describe('Testing Register API', () => {
       .end((err, res) => {
         expect(res).to.have.status(400);
         expect(res.body.message).to.equals('Invalid input');
-=======
-// ********************** DEFAULT WELCOME TESTCASE ****************************
-
-describe('Server!', () => {
-  // Sample test case given to test / endpoint.
-  it('Returns the default welcome message', done => {
-    chai
-      .request(server)
-      .get('/welcome')
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body.status).to.equals('success');
-        assert.strictEqual(res.body.message, 'Welcome!');
->>>>>>> 41e1c6a (Edited Login/Register pages, added logout page, testing folder, altered index.js, and yaml and json files)
         done();
       });
   });
 });
 
-<<<<<<< HEAD
 
 
 
@@ -155,8 +113,4 @@ describe('Testing Login API', () => {
       });
   });
 });
-=======
-// *********************** TODO: WRITE 2 UNIT TESTCASES **************************
-
->>>>>>> 41e1c6a (Edited Login/Register pages, added logout page, testing folder, altered index.js, and yaml and json files)
 // ********************************************************************************
