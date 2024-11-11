@@ -115,6 +115,8 @@ app.post('/login', async (req, res) => {
     // res.render('pages/login.hbs', {message: "Incorrect username or password"});
   }
 
+  console.log(req.body.password);
+  console.log(user.password);
   const match = await bcrypt.compare(req.body.password, user.password);
   if(!match){
       // For testing:
@@ -163,6 +165,8 @@ app.get('/logout', (req, res) => {
 
 
 // Miscellaneous functions
+
+// Used in case queries may return nothing
 async function getQuery(query, args){
   try {
     let result = await db.one(query, args);
