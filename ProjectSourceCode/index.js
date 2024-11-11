@@ -227,6 +227,8 @@ app.post('/login', async (req, res) => {
     // res.render('pages/login.hbs', {message: "Incorrect username or password"});
   }
 
+  console.log(req.body.password);
+  console.log(user.password);
   const match = await bcrypt.compare(req.body.password, user.password);
   if(!match){
       // For testing:
@@ -245,7 +247,39 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// Authentication Required
+app.use(auth);
 
+
+app.get('/discover', (req, res) => {
+  res.render('pages/discover.hbs')
+});
+
+app.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if(err){
+      return res.status(500).send('Failed to destroy session');
+    }
+
+    res.render('pages/logout.hbs')
+
+  });
+});
+
+
+// Miscellaneous functions
+
+// Used in case queries may return nothing
+async function getQuery(query, args){
+  try {
+    let result = await db.one(query, args);
+    return result;
+  }
+  catch(err){
+    // console.log(err);
+    return null;
+  }
+}
 
 
 // starting the server

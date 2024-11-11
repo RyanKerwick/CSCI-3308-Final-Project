@@ -92,9 +92,6 @@ describe('Testing Login API', () => {
   // API: /login
   // Input: {username: 'John Doe', password: 'abcdefg'}
   // Expect: res.status == 200 and res.body.message == 'Success'
-  // Result: This test case should pass and return a status 200 along with a "Success" message.
-  // Explanation: The testcase will call the /login API with the following input
-  // and expects the API to return a status of 200 along with the "Success" message.
 
   it('positive : /login. Checking User Acceptance', done => {
     chai
@@ -112,9 +109,6 @@ describe('Testing Login API', () => {
   // API: /login
   // Input: {username: 'John Doe', password: 'abadaba'}
   // Expect: res.status == 400 and res.body.message == 'Invalid input'
-  // Result: This test case should pass and return a status 400 along with a "Invalid input" message.
-  // Explanation: The testcase will call the /login API with the following invalid inputs
-  // and expects the API to return a status of 400 along with the "Invalid input" message.
 
   it('Negative : /login. Checking invalid password', done => {
     chai
@@ -132,9 +126,6 @@ describe('Testing Login API', () => {
   // API: /login
   // Input: {username: 'Jane Woe', password: 'abcdefg'}
   // Expect: res.status == 400 and res.body.message == 'Invalid input'
-  // Result: This test case should pass and return a status 400 along with a "Invalid input" message.
-  // Explanation: The testcase will call the /login API with the following invalid inputs
-  // and expects the API to return a status of 400 along with the "Invalid input" message.
 
   it('Negative : /login. Checking invalid username', done => {
     chai
