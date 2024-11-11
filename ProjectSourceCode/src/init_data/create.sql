@@ -1,12 +1,11 @@
 CREATE TABLE IF NOT EXISTS users (
-    user_id INT SERIAL PRIMARY KEY,
-    username VARCHAR(100) NOT NULL,
+    username VARCHAR(100) PRIMARY KEY,
     password CHAR(100) NOT NULL,
     profile_img VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS items (
-    item_id INT SERIAL PRIMARY KEY,
+    item_id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     item_img VARCHAR(100),
     color VARCHAR(100),
