@@ -11,51 +11,8 @@ chai.use(chaiHttp);
 const {assert, expect} = chai;
 
 
-// *********************** UNIT TESTCASES **************************
-
-
-describe('Testing Register API', () => {
-
-  // Register Positive Testcase :
-  // API: /register
-  // Input: {username: 'John Doe', password: 'abcdefg'}
-  // Expect: res.status == 200 and res.body.message == 'Success'
-  // Result: This test case should pass and return a status 200 along with a "Success" message.
-  // Explanation: The testcase will call the /register API with the following input
-  // and expects the API to return a status of 200 along with the "Success" message.
-
-  it('positive : /register', done => {
-    chai
-      .request(server)
-      .post('/register')
-      .send({username: 'John Doe', password: 'abcdefg'})
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body.message).to.equals('Success');
-        done();
-      });
-  });
-});
-
-
-  // Register Negative Testcase :
-  // API: /register
-  // Input: {username: 'John Doe', password: 'abadaba'}
-  // Expect: res.status == 400 and res.body.message == 'Invalid input'
-  // Result: This test case should pass and return a status 400 along with a "Invalid input" message.
-  // Explanation: The testcase will call the /register API with the following invalid inputs
-  // and expects the API to return a status of 400 along with the "Invalid input" message.
-
-  it('Negative : /register. Checking invalid name', done => {
-    chai
-      .request(server)
-      .post('/register')
-      .send({username: 'John Doe', password: 'abadaba'})
-      .end((err, res) => {
-        expect(res).to.have.status(400);
-        expect(res.body.message).to.equals('Invalid input');
-      },
 // ********************** DEFAULT WELCOME TESTCASE ****************************
+
 
 describe('Server!', () => {
   // Sample test case given to test / endpoint.
@@ -93,8 +50,20 @@ describe('Testing Login API', () => {
 // Explanation: The testcase will call the /register API with the following input
 // and expects the API to return a status of 200 along with the "Success" message.
 
+// *********************** UNIT TESTCASES **************************
+
+
 
 describe('Testing Register API', () => {
+
+  // Register Positive Testcase :
+  // API: /register
+  // Input: {username: 'John Doe', password: 'abcdefg'}
+  // Expect: res.status == 200 and res.body.message == 'Success'
+  // Result: This test case should pass and return a status 200 along with a "Success" message.
+  // Explanation: The testcase will call the /register API with the following input
+  // and expects the API to return a status of 200 along with the "Success" message.
+
   it('positive : /register', done => {
     chai
       .request(server)
@@ -108,6 +77,7 @@ describe('Testing Register API', () => {
   });
 });
 
+
   // Login Negative Testcase :
   // API: /login
   // Input: {username: 'John Doe', password: 'abadaba'}
@@ -117,11 +87,11 @@ describe('Testing Register API', () => {
     chai
       .request(server)
       .post('/login')
-  
+
 
   // Register Negative Testcase :
   // API: /register
-  // Input: {username: 'John Doe'}
+  // Input: {username: 'John Doe', password: 'abadaba'}
   // Expect: res.status == 400 and res.body.message == 'Invalid input'
   // Result: This test case should pass and return a status 400 along with a "Invalid input" message.
   // Explanation: The testcase will call the /register API with the following invalid inputs
@@ -149,10 +119,72 @@ describe('Testing Register API', () => {
       .request(server)
       .post('/login')
       .send({username: 'Jane Woe', password: 'abcdefg'})
+
+});
+
+
+
+
+describe('Testing Login API', () => {
+  // Login Positive Testcase :
+  // API: /login
+  // Input: {username: 'John Doe', password: 'abcdefg'}
+  // Expect: res.status == 200 and res.body.message == 'Success'
+  // Result: This test case should pass and return a status 200 along with a "Success" message.
+  // Explanation: The testcase will call the /login API with the following input
+  // and expects the API to return a status of 200 along with the "Success" message.
+
+  it('positive : /login. Checking User Acceptance', done => {
+    chai
+      .request(server)
+      .post('/login')
+      .send({username: 'jessika25', password: 'password123'})
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body.message).to.equals('Success');
+        done();
+      });
+  });
+
+  // Login Negative Testcase :
+  // API: /login
+  // Input: {username: 'John Doe', password: 'abadaba'}
+  // Expect: res.status == 400 and res.body.message == 'Invalid input'
+  // Result: This test case should pass and return a status 400 along with a "Invalid input" message.
+  // Explanation: The testcase will call the /login API with the following invalid inputs
+  // and expects the API to return a status of 400 along with the "Invalid input" message.
+
+  it('Negative : /login. Checking invalid password', done => {
+    chai
+      .request(server)
+      .post('/login')
+      .send({username: 'jessika25', password: 'abadaba'})
       .end((err, res) => {
         expect(res).to.have.status(400);
         expect(res.body.message).to.equals('Invalid input');
         done();
       });
   });
-  })}))})
+
+  // Login Negative Testcase :
+  // API: /login
+  // Input: {username: 'Jane Woe', password: 'abcdefg'}
+  // Expect: res.status == 400 and res.body.message == 'Invalid input'
+  // Result: This test case should pass and return a status 400 along with a "Invalid input" message.
+  // Explanation: The testcase will call the /login API with the following invalid inputs
+  // and expects the API to return a status of 400 along with the "Invalid input" message.
+
+  it('Negative : /login. Checking invalid username', done => {
+    chai
+      .request(server)
+      .post('/login')
+      .send({username: 'Jane Woe', password: 'password123'})
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body.message).to.equals('Invalid input');
+        done();
+      });
+  });
+});
+// ********************************************************************************
+  })})
