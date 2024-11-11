@@ -69,12 +69,6 @@ app.use(
 
 // API Routes go here
 
-app.get('/welcome', (req, res) => {
-  res.json({status: 'success', message: 'Welcome!'});
-});
-
-
-
 app.get('/', (req, res) => {
   res.redirect('/login');
 });
@@ -139,19 +133,6 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Authentication Middleware.
-const auth = (req, res, next) => {
-  if (!req.session.user) {
-      // Default to login page.
-      return res.redirect('/login');
-  }
-  next();
-};
-
-// Authentication Required
-app.use(auth);
-
-
 app.get('/discover', (req, res) => {
   //store items in database
   const query = "INSERT INTO items (name, item_img, price, category) VALUES ($1, $2, $3, $4);"
@@ -195,10 +176,6 @@ async function getQuery(query, args){
 }
 
 
-// starting the server
-module.exports = app.listen(3000);
-
-
 app.post('/login', async (req, res) => {
   // check if password from request matches with password in DB
   const query = 'SELECT * FROM users where username = $1'
@@ -224,36 +201,50 @@ app.post('/register', async (req, res) => {
   db.one(query, [req.body.username, hash])
       .then(() => {
           res.redirect('/login');
+          // For testing:
           res.status(200).json({message: 'Success'}) 
+
           // res.redirect('/login');
       })
       .catch(err => {
-          console.log(err);
+          // For testing:
           res.status(400).json({message: 'Invalid input'})
+
           // res.redirect('/register');
       })
-
-  // To-DO: Insert username and hashed password into the 'users' table
 });
 
-// Authentication Required
-app.use(auth);
+app.post('/login', async (req, res) => {
+  // check if password from request matches with password in DB
+  const query = 'SELECT * FROM users where username = $1'
+  let user = await getQuery(query, [req.body.username]);
+
+  if(!user){
+    // For testing:
+    res.status(400).json({message: 'Invalid input'})
+    return;
+
+    // res.render('pages/login.hbs', {message: "Incorrect username or password"});
+  }
+
+  const match = await bcrypt.compare(req.body.password, user.password);
+  if(!match){
+      // For testing:
+      res.status(400).json({message: 'Invalid input'})
+
+      // res.render('pages/login.hbs', {message: "Incorrect username or password"});
+  }else{
+      // For testing:
+      res.status(200).json({message: 'Success'}) 
 
 
-app.get('/discover', (req, res) => {
-  res.render('pages/discover.hbs')
-})
+      //save user details in session like in lab 7
+      // req.session.user = user;
+      // req.session.save();
+      // res.redirect('/discover');
+  }
+});
 
-app.get('/logout', (req, res) => {
-  req.session.destroy(err => {
-    if(err){
-      return res.status(500).send('Failed to destroy session');
-    }
-
-    res.render('pages/logout.hbs')
-
-  });
-})
 
 
 
