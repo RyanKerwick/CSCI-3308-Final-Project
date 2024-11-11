@@ -69,12 +69,6 @@ app.use(
 
 // API Routes go here
 
-app.get('/welcome', (req, res) => {
-  res.json({status: 'success', message: 'Welcome!'});
-});
-
-
-
 app.get('/', (req, res) => {
   res.redirect('/login');
 });
@@ -85,24 +79,7 @@ app.get('/login', (req, res) => {
 
 app.get('/register', (req, res) => {
   res.render('pages/register.hbs');
-})
-
-
-app.post('/login', async (req, res) => {
-  // check if password from request matches with password in DB
-  const query = 'SELECT * FROM users where username = $1'
-  let user = await db.one(query, [req.body.username]);
-
-  const match = await bcrypt.compare(req.body.password, user.password);
-  if(!match){
-      res.render('pages/login.hbs', {message: "Incorrect username or password"});
-  }else{
-      //save user details in session like in lab 7
-      req.session.user = user;
-      req.session.save();
-      res.redirect('/discover');
-  }
-})
+});
 
 // Register
 app.post('/register', async (req, res) => {
@@ -112,18 +89,49 @@ app.post('/register', async (req, res) => {
   const query = 'INSERT INTO users (username, password) values ($1, $2) returning *';
   db.one(query, [req.body.username, hash])
       .then(() => {
+          // For testing:
           res.status(200).json({message: 'Success'}) 
+
           // res.redirect('/login');
       })
       .catch(err => {
-          console.log(err);
+          // For testing:
           res.status(400).json({message: 'Invalid input'})
+
           // res.redirect('/register');
       })
-
-  // To-DO: Insert username and hashed password into the 'users' table
 });
 
+app.post('/login', async (req, res) => {
+  // check if password from request matches with password in DB
+  const query = 'SELECT * FROM users where username = $1'
+  let user = await getQuery(query, [req.body.username]);
+
+  if(!user){
+    // For testing:
+    res.status(400).json({message: 'Invalid input'})
+    return;
+
+    // res.render('pages/login.hbs', {message: "Incorrect username or password"});
+  }
+
+  const match = await bcrypt.compare(req.body.password, user.password);
+  if(!match){
+      // For testing:
+      res.status(400).json({message: 'Invalid input'})
+
+      // res.render('pages/login.hbs', {message: "Incorrect username or password"});
+  }else{
+      // For testing:
+      res.status(200).json({message: 'Success'}) 
+
+
+      //save user details in session like in lab 7
+      // req.session.user = user;
+      // req.session.save();
+      // res.redirect('/discover');
+  }
+});
 
 // Authentication Middleware.
 const auth = (req, res, next) => {
@@ -140,7 +148,7 @@ app.use(auth);
 
 app.get('/discover', (req, res) => {
   res.render('pages/discover.hbs')
-})
+});
 
 app.get('/logout', (req, res) => {
   req.session.destroy(err => {
@@ -151,8 +159,20 @@ app.get('/logout', (req, res) => {
     res.render('pages/logout.hbs')
 
   });
-})
+});
 
+
+// Miscellaneous functions
+async function getQuery(query, args){
+  try {
+    let result = await db.one(query, args);
+    return result;
+  }
+  catch(err){
+    // console.log(err);
+    return null;
+  }
+}
 
 
 // starting the server
