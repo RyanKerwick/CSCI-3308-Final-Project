@@ -28,7 +28,15 @@ services:
       # 'npm run testandrun'
 
       # for functionality
+<<<<<<< HEAD
       'npm start'
 
+=======
+<<<<<<< HEAD
+       'npm start'
+=======
+      'npm start'
+>>>>>>> 601c593 (api route to fake clothing database and release notes)
+>>>>>>> 68ed520 (api route to fake clothing database and release notes)
 volumes:
   group-project:

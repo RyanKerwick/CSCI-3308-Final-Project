@@ -144,25 +144,21 @@ app.post('/login', async (req, res) => {
   } catch (err){
     console.error("Error during login:", err);
     res.status(500).render('pages/login.hbs', { message: "An error occurred. Please try again." });
-    // res.render('pages/login.hbcf s', {message: "Incorrect username or password"});
-  }
-
-  const match = await bcrypt.compare(req.body.password, await bcrypt.hash(user.password, 10)); // Added hash for testing purposes
-  if(!match){
-      // For testing:
-      res.status(400).json({message: 'Invalid input'})
-
-      // res.render('pages/login.hbs', {message: "Incorrect username or password"});
-  }else{
-      // For testing:
-      res.status(200).json({message: 'Success'}) 
-
-
-      //save user details in session like in lab 7
-      //req.session.user = user;
-      //req.session.save();
   }
 });
+
+// Authentication Middleware.
+const auth = (req, res, next) => {
+  if (!req.session.user) {
+      // Default to login page.
+      return res.redirect('/login');
+  }
+  next();
+};
+
+// Authentication Required
+app.use(auth);
+
 
 app.get('/discover', (req, res) => {
   res.render('pages/discover.hbs')
@@ -236,83 +232,6 @@ async function populate_items(){
     console.log(err);
   })
 }
-
-// starting the server
-module.exports = app.listen(3000);
-
-
-
-app.post('/login', async (req, res) => {
-  // check if password from request matches with password in DB
-  const query = 'SELECT * FROM users where username = $1'
-  let user = await db.one(query, [req.body.username]);
-
-  const match = await bcrypt.compare(req.body.password, user.password);
-  if(!match){
-      res.render('pages/login.hbs', {message: "Incorrect username or password"});
-  }else{
-      //save user details in session like in lab 7
-      req.session.user = user;
-      req.session.save();
-      res.redirect('/discover');
-  }
-})
-
-// Register
-app.post('/register', async (req, res) => {
-  //hash the password using bcrypt library
-  const hash = await bcrypt.hash(req.body.password, 10);
-  
-  const query = 'INSERT INTO users (username, password) values ($1, $2) returning *';
-  db.one(query, [req.body.username, hash])
-      .then(() => {
-          res.redirect('/login');
-          // For testing:
-          res.status(200).json({message: 'Success'}) 
-
-          // res.redirect('/login');
-      })
-      .catch(err => {
-          // For testing:
-          res.status(400).json({message: 'Invalid input'})
-
-          // res.redirect('/register');
-      })
-});
-
-app.post('/login', async (req, res) => {
-  // check if password from request matches with password in DB
-  const query = 'SELECT * FROM users where username = $1'
-  let user = await getQuery(query, [req.body.username]);
-
-  if(!user){
-    // For testing:
-    res.status(400).json({message: 'Invalid input'})
-    return;
-
-    // res.render('pages/login.hbs', {message: "Incorrect username or password"});
-  }
-
-  const match = await bcrypt.compare(req.body.password, user.password);
-  if(!match){
-      // For testing:
-      res.status(400).json({message: 'Invalid input'})
-
-      // res.render('pages/login.hbs', {message: "Incorrect username or password"});
-  }else{
-      // For testing:
-      res.status(200).json({message: 'Success'}) 
-
-
-      //save user details in session like in lab 7
-      // req.session.user = user;
-      // req.session.save();
-      // res.redirect('/discover');
-  }
-});
-
-
-
 
 // starting the server
 module.exports = app.listen(3000);
