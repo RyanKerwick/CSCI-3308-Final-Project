@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS items (
     item_id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     item_img VARCHAR(100),
-    color VARCHAR(100),
     price FLOAT,
     formality VARCHAR(100)
 );

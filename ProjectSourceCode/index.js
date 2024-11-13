@@ -90,9 +90,9 @@ app.post('/register', async (req, res) => {
   db.one(query, [req.body.username, hash])
       .then(() => {
           // For testing:
-          res.status(200).json({message: 'Success'}) 
+          //res.status(200).json({message: 'Success'}) 
 
-          // res.redirect('/login');
+          res.redirect('/login');
       })
       .catch(err => {
           // For testing:
@@ -104,7 +104,7 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   // check if password from request matches with password in DB
-  const query = 'SELECT * FROM users where username = $1'
+  const query = 'SELECT * FROM users where username = $1';
   let user = await getQuery(query, [req.body.username]);
 
   if(!user){
@@ -129,9 +129,9 @@ app.post('/login', async (req, res) => {
 
 
       //save user details in session like in lab 7
-      // req.session.user = user;
-      // req.session.save();
-      // res.redirect('/discover');
+      //req.session.user = user;
+      //req.session.save();
+      //res.redirect('/discover');
   }
 });
 
@@ -149,6 +149,18 @@ app.use(auth);
 
 
 app.get('/discover', (req, res) => {
+  //store items in database
+  const query = "INSERT INTO items (name, item_img, price, category) VALUES ($1, $2, $3, $4);"
+  var clothing_items;
+  fetch("https://fakestoreapi.com/products").then((res) => res.json()).then((json) => {
+    clothing_items = json;
+    console.log(json);
+    for (i = 0; i < 20; i++) {
+      db.one(query, [clothing_items.i.title, clothing_items.i.image, clothing_items.i.price, clothing_items.i.category])
+      .then(msg => console.log(msg))
+      .catch(error => console.log(error));
+    }
+  });
   res.render('pages/discover.hbs')
 });
 
