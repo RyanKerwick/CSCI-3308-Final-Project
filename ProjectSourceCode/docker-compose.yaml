@@ -23,9 +23,9 @@ services:
       - ./:/ProjectSourceCode
     command: 
       # for testing
-      'npm run testandrun'
+      #'npm run testandrun'
 
       # for functionality
-      # 'npm start'
+      'npm start'
 volumes:
   group-project:
