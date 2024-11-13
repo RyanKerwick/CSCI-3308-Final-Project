@@ -161,7 +161,6 @@ app.get('/discover', (req, res) => {
       .catch(error => console.log(error));
     }
   });
-
   res.render('pages/discover.hbs')
 });
 
