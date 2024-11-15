@@ -229,7 +229,7 @@ app.post('/login', async (req, res) => {
 
   console.log(req.body.password);
   console.log(user.password);
-  const match = await bcrypt.compare(req.body.password, user.password);
+  const match = await bcrypt.compare(req.body.password, await bcrypt.hash(user.password, 10));
   if(!match){
       // For testing:
       res.status(400).json({message: 'Invalid input'})
