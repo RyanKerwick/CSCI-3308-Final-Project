@@ -1,5 +1,5 @@
 {
-  "name": "Clothing Site",
+  "name": "clothingsite",
   "main": "./index",
   "dependencies": {
     "express": "^4.6.1",
@@ -21,7 +21,7 @@
   "scripts": {
     "prestart": "npm install",
     "start": "node index.js",
-    "test": "mocha",
+    "test": "npx mocha",
     "testandrun": "npm run prestart && npm run test && npm start"
   }
 }
