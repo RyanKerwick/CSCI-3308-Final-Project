@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html lang="eng">
     <head>
-        {{> header}}
+       {{> header}}
+       <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     </head>
     <body>
-        <! Search button >
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon2">
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button">Search</button>
+        <!-- Search button -->
+        <form id="search-form">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Find Clothes" id="search-input" aria-label="Search">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button">Search</button>
+                </div>
             </div>
-        </div>
-        <! Display cards >
-        <! Outline from events lab, will update with table data>
+        </form>
+        <!-- Display cards -->
+        <!-- Outline from events lab, will update with table data -->
         <div class="col mb-4">
-              <div class="card" id="example-card">
-                <img src="src/init_data/tuxedo.png" class="card-img-top" alt="...">
+              <div class="card" id="example-card" style="max-width: 200px; height: auto;" >
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIjilFX8N14B-U621mf8AHMFG_Xm2XR4pb_Q&s" class="card-img-top" >
                 <div class="card-body">
                   <h5 class="card-title">Tuxedo</h5>
-                  <p class="card-text">A classy tuxedo for a formal occasion.</p>
-                  <! Wishlist button>
-                    <button class="btn btn-secondary" data-outfit-id="{{this.id}}" data-outfit-name="{{this.name}}" data-outfit-description="{{this.description}}">
-                        Add to Wishlist
-                    </button>
+                  <p class="card-text">A black tuxedo for a formal occasion.</p>
+                  <!-- Wishlist button -->
+                  <button class="btn" style="border: none; background: none;" data-outfit-id="{{this.id}}" data-outfit-name="{{this.name}}" data-outfit-description="{{this.description}}">
+                    <span class="bi bi-star-fill" style="color: orange;"></span>
+                    Wishlist
+                  </button>
                 </div>
               </div>
             </div>
@@ -35,17 +39,17 @@
                         <div class="card-body">
                             <h5 class="card-title">{{this.name}}</h5>
                             <p class="card-text">
-                                <! Based on api, might be able to add description tags>
-                                <! Add a description of the item in the card text>
+                                <!-- Based on api, might be able to add description tags -->
+                                <!-- Add a description of the item in the card text -->
                                 {{#if this.description}}
                                     Description: {{this.description}}
                                 {{else}}
                                     No outfit description.
                                 {{/if}}
                             </p>
-                            <! Wishlist button>
+                            <!-- Wishlist button -->
                             <button class="btn btn-secondary" data-outfit-id="{{this.id}}" data-outfit-name="{{this.name}}" data-outfit-description="{{this.description}}">
-                                Add to Wishlist
+                                Wishlist
                             </button>
                         </div>
                     </div>
@@ -55,6 +59,3 @@
                 <p>No items found.</p>
             {{/if}}
         </div>
-    </body>
-</html>
-{{> message}}

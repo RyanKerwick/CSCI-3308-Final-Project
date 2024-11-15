@@ -112,12 +112,10 @@ app.post('/login', async (req, res) => {
     res.status(400).json({message: 'Invalid input'})
     return;
 
-    // res.render('pages/login.hbs', {message: "Incorrect username or password"});
+    // res.render('pages/login.hbcf s', {message: "Incorrect username or password"});
   }
 
-  console.log(req.body.password);
-  console.log(user.password);
-  const match = await bcrypt.compare(req.body.password, user.password);
+  const match = await bcrypt.compare(req.body.password, await bcrypt.hash(user.password, 10)); // Added hash for testing purposes
   if(!match){
       // For testing:
       res.status(400).json({message: 'Invalid input'})
