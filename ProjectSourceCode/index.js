@@ -161,7 +161,10 @@ app.get('/discover', (req, res) => {
       .catch(error => console.log(error));
     }
   });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1a192e1218472301720682eabbe04def956f1696
   res.render('pages/discover.hbs')
 });
 
