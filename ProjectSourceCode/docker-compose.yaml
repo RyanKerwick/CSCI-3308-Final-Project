@@ -26,10 +26,6 @@ services:
       #'npm run testandrun'
 
       # for functionality
-<<<<<<< HEAD
-      'npm start'
-=======
        'npm start'
->>>>>>> 1a192e1218472301720682eabbe04def956f1696
 volumes:
   group-project:
