@@ -96,9 +96,9 @@ app.post('/register', async (req, res) => {
       })
       .catch(err => {
           // For testing:
-          res.status(400).json({message: 'Invalid input'})
+          // res.status(400).json({message: 'Invalid input'})
 
-          // res.redirect('/register');
+          res.redirect('/register');
       })
 });
 
@@ -109,8 +109,8 @@ app.post('/login', async (req, res) => {
 
   if(!user){
     // For testing:
-    res.status(400).json({message: 'Invalid input'})
-    return;
+    // res.status(400).json({message: 'Invalid input'})
+    // return;
 
     // res.render('pages/login.hbcf s', {message: "Incorrect username or password"});
   }
@@ -225,25 +225,29 @@ app.post('/login', async (req, res) => {
     return;
 
     // res.render('pages/login.hbs', {message: "Incorrect username or password"});
+    res.render('pages/login.hbs', {message: "Incorrect username or password"});
   }
 
-  console.log(req.body.password);
-  console.log(user.password);
-  const match = await bcrypt.compare(req.body.password, await bcrypt.hash(user.password, 10));
-  if(!match){
-      // For testing:
-      res.status(400).json({message: 'Invalid input'})
-
-      // res.render('pages/login.hbs', {message: "Incorrect username or password"});
-  }else{
-      // For testing:
-      res.status(200).json({message: 'Success'}) 
-
-
-      //save user details in session like in lab 7
-      //req.session.user = user;
-      //req.session.save();
-      //res.redirect('/discover');
+  try {
+    const match = await bcrypt.compare(req.body.password, user.password);
+    if(!match){
+        // For testing:
+        // res.status(400).json({message: 'Invalid input'})
+  
+        res.render('pages/login.hbs', {message: "Incorrect username or password"});
+    }else{
+        // For testing:
+        // res.status(200).json({message: 'Success'}) 
+  
+  
+        //save user details in session like in lab 7
+        req.session.user = user;
+        req.session.save();
+        res.redirect('/discover');
+    }
+  } catch (err){
+    console.error("Error during login:", err);
+    res.status(500).render('pages/login.hbs', { message: "An error occurred. Please try again." });
   }
 });
 
