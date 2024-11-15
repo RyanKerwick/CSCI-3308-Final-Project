@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS items (
     name VARCHAR(50) NOT NULL,
     item_img VARCHAR(100),
     price FLOAT,
-    formality VARCHAR(100)
+    category VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS wishlist (

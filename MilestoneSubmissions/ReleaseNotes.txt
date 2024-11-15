@@ -1,0 +1,13 @@
+=====Release notes=====
+11/6
+- Added tables for database
+- Added templates for database insertion and some queries
+- Added register page
+- Added login page
+- Added docker file and config info
+
+11/13
+- Added API call to external database with clothing items
+- Rendered website to login page
+- Header and title partial
+- Testing functionality
