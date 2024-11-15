@@ -90,7 +90,7 @@ app.post('/register', async (req, res) => {
   db.one(query, [req.body.username, hash])
       .then(() => {
           // For testing:
-          //res.status(200).json({message: 'Success'}) 
+          // res.status(200).json({message: 'Success'}) 
 
           res.redirect('/login');
       })
