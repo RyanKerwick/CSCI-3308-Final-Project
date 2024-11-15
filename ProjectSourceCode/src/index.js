@@ -123,7 +123,6 @@ app.post('/login', async (req, res) => {
 
     res.render('pages/login.hbs', {message: "Incorrect username or password."});
   }
-
   try {
     const match = await bcrypt.compare(req.body.password, user.password);
     if(!match){
@@ -144,8 +143,25 @@ app.post('/login', async (req, res) => {
   } catch (err){
     console.error("Error during login:", err);
     res.status(500).render('pages/login.hbs', { message: "An error occurred. Please try again." });
+  console.log(req.body.password);
+  console.log(user.password);
+  const match = await bcrypt.compare(req.body.password, await bcrypt.hash(user.password, 10));
+  if(!match){
+      // For testing:
+      res.status(400).json({message: 'Invalid input'})
+
+      // res.render('pages/login.hbs', {message: "Incorrect username or password"});
+  }else{
+      // For testing:
+      res.status(200).json({message: 'Success'}) 
+
+
+      //save user details in session like in lab 7
+      //req.session.user = user;
+      //req.session.save();
+      //res.redirect('/discover');
   }
-});
+};
 
 // Authentication Middleware.
 const auth = (req, res, next) => {
@@ -235,4 +251,4 @@ async function populate_items(){
 
 // starting the server
 module.exports = app.listen(3000);
-console.log('Server is listening on port 3000');
+console.log('Server is listening on port 3000')})
