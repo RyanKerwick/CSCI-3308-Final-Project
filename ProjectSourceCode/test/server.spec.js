@@ -97,7 +97,7 @@ describe('Testing Login API', () => {
     chai
       .request(server)
       .post('/login')
-      .send({username: 'jessika25', password: 'password123'})
+      .send({username: 'John Doe', password: 'abcdefg'})
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body.message).to.equals('Success');
@@ -114,7 +114,7 @@ describe('Testing Login API', () => {
     chai
       .request(server)
       .post('/login')
-      .send({username: 'jessika25', password: 'abadaba'})
+      .send({username: 'John Doe', password: 'abadaba'})
       .end((err, res) => {
         expect(res).to.have.status(400);
         expect(res.body.message).to.equals('Invalid input');
@@ -131,7 +131,7 @@ describe('Testing Login API', () => {
     chai
       .request(server)
       .post('/login')
-      .send({username: 'Jane Woe', password: 'password123'})
+      .send({username: 'Jane Woe', password: 'abcdefg'})
       .end((err, res) => {
         expect(res).to.have.status(400);
         expect(res.body.message).to.equals('Invalid input');
