@@ -1,10 +1,6 @@
 CREATE TABLE IF NOT EXISTS users (
-<<<<<<< HEAD
-    username VARCHAR(100) PRIMARY KEY,
-=======
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(100) NOT NULL,
->>>>>>> a73e178 (Updated test folder)
     password CHAR(100) NOT NULL,
     profile_img VARCHAR(100)
 );
