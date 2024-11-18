@@ -161,7 +161,18 @@ app.use(auth);
 
 
 app.get('/discover', (req, res) => {
-  res.render('pages/discover.hbs')
+
+  // Query the database to get the items table information in order to populate the discover page display cards.
+  let query = "SELECT * FROM items";
+  db.any(query)
+  .then(result => {
+    console.log(result);
+    res.render('pages/discover.hbs', { clothing_items: result })
+  })
+  .catch(err => {
+    console.log(err);
+  })
+
 });
 
 app.get('/logout', (req, res) => {
@@ -201,10 +212,9 @@ async function populate_items(){
   db.one(empty_query)
   .then((result) => {
     // console.log(result)
-    if(result.case == 0){
+    if(result.case == 0){ // Items table is empty
       // Insert into items table with external API
       
-      //store items in database
       const query = "INSERT INTO items (name, item_img, price, category) VALUES ($1, $2, $3, $4) returning item_id;"
       var clothing_items;
       fetch("https://fakestoreapi.com/products").then((res) => res.json()).then((json) => {

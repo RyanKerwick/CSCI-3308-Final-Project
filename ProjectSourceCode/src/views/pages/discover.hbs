@@ -8,6 +8,22 @@
         </div>
         <! Display cards >
         <! Outline from events lab, will update with table data>
+        {{#each clothing_items}}
+        <div class="col mb-4">
+            <div class="card" id="{{this.item_id}}">
+                <img src="{{this.item_img}}" class="card-img-top" alt="{{this.name}}">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.name}}</h5>
+                    <p class="card-text">A classy tuxedo for a formal occasion.</p>
+                    <! Wishlist button>
+                    <button class="btn btn-secondary" data-outfit-id="{{this.id}}" data-outfit-name="{{this.name}}" data-outfit-description="{{this.description}}">
+                        Add to Wishlist
+                    </button>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+
         <div class="col mb-4">
               <div class="card" id="example-card">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDQU9KOaoe_-6N3AKh4SbGKEicKvuCU-YTgA&s" class="card-img-top" alt="...">
