@@ -107,7 +107,7 @@ app.post('/register', async (req, res) => {
           // For testing:
           // res.status(400).json({message: 'Invalid input'})
 
-          res.redirect('/register');
+          res.render('pages/register', {message: "Username taken. Please use a different username."});
       })
 });
 
@@ -243,7 +243,7 @@ app.post('/login', async (req, res) => {
         // For testing:
         // res.status(400).json({message: 'Invalid input'})
   
-        res.render('pages/login.hbs', {message: "Incorrect username or password"});
+        res.render('pages/login.hbs', {message: "Incorrect username or password."});
     }else{
         // For testing:
         // res.status(200).json({message: 'Success'}) 
