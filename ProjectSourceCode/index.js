@@ -37,6 +37,15 @@ const db = pgp(dbConfig);
 db.connect()
   .then(obj => {
     console.log('Database connection successful'); // you can view this message in the docker compose logs
+    // console.log(obj);
+
+    //  ---------------------------------------------------------------------
+    //  TODO: If Database is empty, add the items from the API in a function. This shouldn't happen every time we recieve a discover Post request
+    //  I think we should not have an insert.sql file and just add from the external API if the db is empty
+    //  ---------------------------------------------------------------------
+
+    populate_items();
+
     obj.done(); // success, release the connection;
   })
   .catch(error => {
@@ -152,18 +161,6 @@ app.use(auth);
 
 
 app.get('/discover', (req, res) => {
-  //store items in database
-  const query = "INSERT INTO items (name, item_img, price, category) VALUES ($1, $2, $3, $4);"
-  var clothing_items;
-  fetch("https://fakestoreapi.com/products").then((res) => res.json()).then((json) => {
-    clothing_items = json;
-    console.log(json);
-    for (i = 0; i < 20; i++) {
-      db.one(query, [clothing_items.i.title, clothing_items.i.image, clothing_items.i.price, clothing_items.i.category])
-      .then(msg => console.log(msg))
-      .catch(error => console.log(error));
-    }
-  });
   res.render('pages/discover.hbs')
 });
 
@@ -193,6 +190,48 @@ async function getQuery(query, args){
   }
 }
 
+
+
+/* populate_items: Checks if items table in the database is empty, if so, will use the external API to repopulate the table.
+  Use: If docker compose down -v is used, the database will be updated with the most recent external API data. Only works if insert.sql is commented out.
+*/
+async function populate_items(){
+  let empty_query = "SELECT CASE WHEN EXISTS (SELECT * FROM items LIMIT 1) THEN 1 ELSE 0 END"
+
+  db.one(empty_query)
+  .then((result) => {
+    // console.log(result)
+    if(result.case == 0){
+      // Insert into items table with external API
+      
+      //store items in database
+      const query = "INSERT INTO items (name, item_img, price, category) VALUES ($1, $2, $3, $4) returning item_id;"
+      var clothing_items;
+      fetch("https://fakestoreapi.com/products").then((res) => res.json()).then((json) => {
+        clothing_items = json;
+        // console.log(clothing_items);
+
+        ci_length = Object.keys(json).length;
+        // console.log(ci_length);
+
+        for (i = 0; i < ci_length; i++) {
+          db.one(query, [clothing_items[i].title, clothing_items[i].image, clothing_items[i].price, clothing_items[i].category])
+          // .then(msg => console.log(msg))
+          .catch(error => console.log(error));
+        }
+        console.log("Items table has been repopulated.");
+        return;
+      });
+    }
+    else{
+      console.log("Items table already populated.")
+      return;
+    }
+  })
+  .catch(err => {
+    console.log(err);
+  })
+}
 
 // starting the server
 module.exports = app.listen(3000);

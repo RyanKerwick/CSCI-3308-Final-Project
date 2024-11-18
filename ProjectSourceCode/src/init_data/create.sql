@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS items (
     item_id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
+    name VARCHAR(200) NOT NULL,
     item_img VARCHAR(100),
     price FLOAT,
     category VARCHAR(100)
