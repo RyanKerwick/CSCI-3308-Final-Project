@@ -6,10 +6,11 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS items (
     item_id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
+    name VARCHAR(150) NOT NULL,
     item_img VARCHAR(100),
     price FLOAT,
-    category VARCHAR(100)
+    category VARCHAR(100),
+    description VARCHAR(2000)
 );
 
 CREATE TABLE IF NOT EXISTS wishlist (

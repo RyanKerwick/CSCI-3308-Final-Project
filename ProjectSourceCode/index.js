@@ -136,32 +136,36 @@ app.post('/login', async (req, res) => {
 });
 
 // Authentication Middleware.
-const auth = (req, res, next) => {
-  if (!req.session.user) {
-      // Default to login page.
-      return res.redirect('/login');
-  }
-  next();
-};
+// const auth = (req, res, next) => {
+//  if (!req.session.user) {
+//      // Default to login page.
+//      return res.redirect('/login');
+//  }
+//  next();
+//};
 
 // Authentication Required
-app.use(auth);
+// app.use(auth);
 
 
 app.get('/discover', (req, res) => {
   //store items in database
-  const query = "INSERT INTO items (name, item_img, price, category) VALUES ($1, $2, $3, $4);"
+  const query = "INSERT INTO items (item_id, name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;"  
+  const query2 = "SELECT json_agg(items) FROM items;"
   var clothing_items;
+  var json_to_pass;
   fetch("https://fakestoreapi.com/products").then((res) => res.json()).then((json) => {
     clothing_items = json;
-    console.log(json);
     for (i = 0; i < 20; i++) {
-      db.one(query, [clothing_items.i.title, clothing_items.i.image, clothing_items.i.price, clothing_items.i.category])
-      .then(msg => console.log(msg))
+      db.one(query, [i + 2, clothing_items[i].title, clothing_items[i].image, clothing_items[i].price, clothing_items[i].category, clothing_items[i].description])
+      .then(msg => {
+        console.log(msg)
+      })
       .catch(error => console.log(error));
+      json_to_pass = json;
     }
   });
-  res.render('pages/discover.hbs')
+  res.render('pages/discover.hbs',{json_to_pass});
 });
 
 app.get('/logout', (req, res) => {
