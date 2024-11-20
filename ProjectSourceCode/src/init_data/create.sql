@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(100) PRIMARY KEY,
-    password CHAR(100) NOT NULL,
+    password VARCHAR(500) NOT NULL,
     profile_img VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS items (
     item_id SERIAL PRIMARY KEY,
-    name VARCHAR(150) NOT NULL,
+    name VARCHAR(200) NOT NULL,
     item_img VARCHAR(100),
     price FLOAT,
     category VARCHAR(100),

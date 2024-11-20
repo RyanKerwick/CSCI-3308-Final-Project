@@ -37,6 +37,15 @@ const db = pgp(dbConfig);
 db.connect()
   .then(obj => {
     console.log('Database connection successful'); // you can view this message in the docker compose logs
+    // console.log(obj);
+
+    //  ---------------------------------------------------------------------
+    //  TODO: If Database is empty, add the items from the API in a function. This shouldn't happen every time we recieve a discover Post request
+    //  I think we should not have an insert.sql file and just add from the external API if the db is empty
+    //  ---------------------------------------------------------------------
+
+    populate_items();
+
     obj.done(); // success, release the connection;
   })
   .catch(error => {
@@ -90,15 +99,15 @@ app.post('/register', async (req, res) => {
   db.one(query, [req.body.username, hash])
       .then(() => {
           // For testing:
-          //res.status(200).json({message: 'Success'}) 
+          // res.status(200).json({message: 'Success'}) 
 
           res.redirect('/login');
       })
       .catch(err => {
           // For testing:
-          res.status(400).json({message: 'Invalid input'})
+          // res.status(400).json({message: 'Invalid input'})
 
-          // res.redirect('/register');
+          res.render('pages/register', {message: "Username taken. Please use a different username."});
       })
 });
 
@@ -109,29 +118,32 @@ app.post('/login', async (req, res) => {
 
   if(!user){
     // For testing:
-    res.status(400).json({message: 'Invalid input'})
-    return;
+    // res.status(400).json({message: 'Invalid input'})
+    // return;
 
-    // res.render('pages/login.hbs', {message: "Incorrect username or password"});
+    res.render('pages/login.hbs', {message: "Incorrect username or password."});
   }
 
-  console.log(req.body.password);
-  console.log(user.password);
-  const match = await bcrypt.compare(req.body.password, user.password);
-  if(!match){
-      // For testing:
-      res.status(400).json({message: 'Invalid input'})
-
-      // res.render('pages/login.hbs', {message: "Incorrect username or password"});
-  }else{
-      // For testing:
-      res.status(200).json({message: 'Success'}) 
-
-
-      //save user details in session like in lab 7
-      //req.session.user = user;
-      //req.session.save();
-      //res.redirect('/discover');
+  try {
+    const match = await bcrypt.compare(req.body.password, user.password);
+    if(!match){
+        // For testing:
+        // res.status(400).json({message: 'Invalid input'})
+  
+        res.render('pages/login.hbs', {message: "Incorrect username or password."});
+    }else{
+        // For testing:
+        // res.status(200).json({message: 'Success'}) 
+  
+  
+        //save user details in session like in lab 7
+        req.session.user = user;
+        req.session.save();
+        res.redirect('/discover');
+    }
+  } catch (err){
+    console.error("Error during login:", err);
+    res.status(500).render('pages/login.hbs', { message: "An error occurred. Please try again." });
   }
 });
 
@@ -194,6 +206,48 @@ async function getQuery(query, args){
   }
 }
 
+
+
+/* populate_items: Checks if items table in the database is empty, if so, will use the external API to repopulate the table.
+  Use: If docker compose down -v is used, the database will be updated with the most recent external API data. Only works if insert.sql is commented out.
+*/
+async function populate_items(){
+  let empty_query = "SELECT CASE WHEN EXISTS (SELECT * FROM items LIMIT 1) THEN 1 ELSE 0 END"
+
+  db.one(empty_query)
+  .then((result) => {
+    // console.log(result)
+    if(result.case == 0){
+      // Insert into items table with external API
+      
+      //store items in database
+      const query = "INSERT INTO items (name, item_img, price, category) VALUES ($1, $2, $3, $4) returning item_id;"
+      var clothing_items;
+      fetch("https://fakestoreapi.com/products").then((res) => res.json()).then((json) => {
+        clothing_items = json;
+        // console.log(clothing_items);
+
+        ci_length = Object.keys(json).length;
+        // console.log(ci_length);
+
+        for (i = 0; i < ci_length; i++) {
+          db.one(query, [clothing_items[i].title, clothing_items[i].image, clothing_items[i].price, clothing_items[i].category])
+          // .then(msg => console.log(msg))
+          .catch(error => console.log(error));
+        }
+        console.log("Items table has been repopulated.");
+        return;
+      });
+    }
+    else{
+      console.log("Items table already populated.")
+      return;
+    }
+  })
+  .catch(err => {
+    console.log(err);
+  })
+}
 
 // starting the server
 module.exports = app.listen(3000);

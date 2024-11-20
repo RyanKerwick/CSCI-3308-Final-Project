@@ -21,9 +21,11 @@ services:
       - '3000:3000'
     volumes:
       - ./:/ProjectSourceCode
+      - /ProjectSourceCode/node_modules
+
     command: 
       # for testing
-      #'npm run testandrun'
+      # 'npm run testandrun'
 
       # for functionality
       'npm start'

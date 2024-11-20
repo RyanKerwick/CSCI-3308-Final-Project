@@ -1,11 +1,11 @@
-INSERT INTO users (username, password, profile_img) VALUES
-('jessika25', 'password123','/user1img.jpg');
+-- INSERT INTO users (username, password, profile_img) VALUES
+-- ('jessika25', 'password123','/user1img.jpg');
 
 INSERT INTO items (item_id, name, item_img, price, category, description) VALUES
 (1, 'Nordstrom Rack Tuxedo Jacket', '/tuxedo.png', 149.99, 'formal', 'This is a tuxedo.');
 
-INSERT INTO wishlist (id_user, id_item) VALUES
-(1,1);
+-- INSERT INTO wishlist (id_user, id_item) VALUES
+-- (1,1);
 
 -- Queries for API routes: 
     -- Get user info for login authentication with username $1: "SELECT * FROM users WHERE username = $1;"
