@@ -27,11 +27,11 @@
               </div>
             </div>
         <div class="row">
-            {{#if results.length}}
-                {{#each results}}
+            {{#if items.length}}
+                {{#each items}}
                 <div class="col-md-4 mb-4">
                     <div class="card">
-                        <img src="{{#if this.images.length}}{{this.images.[0].url}}{{else}}/resources/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.name}}">
+                        <img src="{{#if this.item_img.length}}{{this.item_img}}{{else}}/resources/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.name}}">
                         <div class="card-body">
                             <h5 class="card-title">{{this.name}}</h5>
                             <p class="card-text">

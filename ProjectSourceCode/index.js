@@ -162,22 +162,18 @@ app.post('/login', async (req, res) => {
 
 app.get('/discover', (req, res) => {
   //store items in database
-  const query = "INSERT INTO items (item_id, name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;"  
-  const query2 = "SELECT json_agg(items) FROM items;"
-  var clothing_items;
-  var json_to_pass;
-  fetch("https://fakestoreapi.com/products").then((res) => res.json()).then((json) => {
-    clothing_items = json;
-    for (i = 0; i < 20; i++) {
-      db.one(query, [i + 2, clothing_items[i].title, clothing_items[i].image, clothing_items[i].price, clothing_items[i].category, clothing_items[i].description])
-      .then(msg => {
-        console.log(msg)
+  //const query = "INSERT INTO items (item_id, name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;"  
+  var items = [];
+  const query = "SELECT * FROM items WHERE item_id = $1;"
+  for (i = 1; i <= 20; i++) {
+      db.one(query,[i])
+      .then(item => {
+        console.log(item);
+        items.push(item);
       })
       .catch(error => console.log(error));
-      json_to_pass = json;
     }
-  });
-  res.render('pages/discover.hbs',{json_to_pass});
+  res.render('pages/discover.hbs',{items});
 });
 
 app.get('/logout', (req, res) => {
@@ -206,8 +202,6 @@ async function getQuery(query, args){
   }
 }
 
-
-
 /* populate_items: Checks if items table in the database is empty, if so, will use the external API to repopulate the table.
   Use: If docker compose down -v is used, the database will be updated with the most recent external API data. Only works if insert.sql is commented out.
 */
@@ -221,7 +215,7 @@ async function populate_items(){
       // Insert into items table with external API
       
       //store items in database
-      const query = "INSERT INTO items (name, item_img, price, category) VALUES ($1, $2, $3, $4) returning item_id;"
+      const query = "INSERT INTO items (name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5) returning item_id;"
       var clothing_items;
       fetch("https://fakestoreapi.com/products").then((res) => res.json()).then((json) => {
         clothing_items = json;
@@ -231,10 +225,15 @@ async function populate_items(){
         // console.log(ci_length);
 
         for (i = 0; i < ci_length; i++) {
-          db.one(query, [clothing_items[i].title, clothing_items[i].image, clothing_items[i].price, clothing_items[i].category])
+          db.one(query, [clothing_items[i].title, clothing_items[i].image, clothing_items[i].price, clothing_items[i].category, clothing_items[i].description])
           // .then(msg => console.log(msg))
           .catch(error => console.log(error));
         }
+
+        //delete electronic items
+        //const query2 = "DELETE FROM items WHERE category = 'electronics'"
+        //db.one(query).then(msg => console.log(msg)).catch(error => console.log(error));
+
         console.log("Items table has been repopulated.");
         return;
       });
