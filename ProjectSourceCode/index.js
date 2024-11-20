@@ -107,7 +107,7 @@ app.post('/register', async (req, res) => {
           // For testing:
           // res.status(400).json({message: 'Invalid input'})
 
-          res.redirect('/register');
+          res.render('pages/register', {message: "Username taken. Please use a different username."});
       })
 });
 
@@ -121,7 +121,7 @@ app.post('/login', async (req, res) => {
     // res.status(400).json({message: 'Invalid input'})
     // return;
 
-    res.render('pages/login.hbs', {message: "Incorrect username or password"});
+    res.render('pages/login.hbs', {message: "Incorrect username or password."});
   }
 
   try {
@@ -130,7 +130,7 @@ app.post('/login', async (req, res) => {
         // For testing:
         // res.status(400).json({message: 'Invalid input'})
   
-        res.render('pages/login.hbs', {message: "Incorrect username or password"});
+        res.render('pages/login.hbs', {message: "Incorrect username or password."});
     }else{
         // For testing:
         // res.status(200).json({message: 'Success'}) 
@@ -148,31 +148,32 @@ app.post('/login', async (req, res) => {
 });
 
 // Authentication Middleware.
-const auth = (req, res, next) => {
-  if (!req.session.user) {
-      // Default to login page.
-      return res.redirect('/login');
-  }
-  next();
-};
+// const auth = (req, res, next) => {
+//  if (!req.session.user) {
+//      // Default to login page.
+//      return res.redirect('/login');
+//  }
+//  next();
+//};
 
 // Authentication Required
-app.use(auth);
+// app.use(auth);
 
 
 app.get('/discover', (req, res) => {
-
-  // Query the database to get the items table information in order to populate the discover page display cards.
-  let query = "SELECT * FROM items";
-  db.any(query)
-  .then(result => {
-    console.log(result);
-    res.render('pages/discover.hbs', { clothing_items: result })
-  })
-  .catch(err => {
-    console.log(err);
-  })
-
+  //store items in database
+  //const query = "INSERT INTO items (item_id, name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;"  
+  var items = [];
+  const query = "SELECT * FROM items WHERE item_id = $1;"
+  for (i = 1; i <= 20; i++) {
+      db.one(query,[i])
+      .then(item => {
+        console.log(item);
+        items.push(item);
+      })
+      .catch(error => console.log(error));
+    }
+  res.render('pages/discover.hbs',{items});
 });
 
 app.get('/logout', (req, res) => {
@@ -201,8 +202,6 @@ async function getQuery(query, args){
   }
 }
 
-
-
 /* populate_items: Checks if items table in the database is empty, if so, will use the external API to repopulate the table.
   Use: If docker compose down -v is used, the database will be updated with the most recent external API data. Only works if insert.sql is commented out.
 */
@@ -215,7 +214,8 @@ async function populate_items(){
     if(result.case == 0){ // Items table is empty
       // Insert into items table with external API
       
-      const query = "INSERT INTO items (name, item_img, price, category) VALUES ($1, $2, $3, $4) returning item_id;"
+      //store items in database
+      const query = "INSERT INTO items (name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5) returning item_id;"
       var clothing_items;
       fetch("https://fakestoreapi.com/products").then((res) => res.json()).then((json) => {
         clothing_items = json;
@@ -225,10 +225,15 @@ async function populate_items(){
         // console.log(ci_length);
 
         for (i = 0; i < ci_length; i++) {
-          db.one(query, [clothing_items[i].title, clothing_items[i].image, clothing_items[i].price, clothing_items[i].category])
+          db.one(query, [clothing_items[i].title, clothing_items[i].image, clothing_items[i].price, clothing_items[i].category, clothing_items[i].description])
           // .then(msg => console.log(msg))
           .catch(error => console.log(error));
         }
+
+        //delete electronic items
+        //const query2 = "DELETE FROM items WHERE category = 'electronics'"
+        //db.one(query).then(msg => console.log(msg)).catch(error => console.log(error));
+
         console.log("Items table has been repopulated.");
         return;
       });

@@ -3,11 +3,11 @@
     <form action="/register" method="post">
         <div>
             <label for="username">Username</label>
-            <input type="text" class="form-control" required-id="username" name="username">
+            <input type="text" class="form-control" required-id="username" name="username" required>
         </div>
         <div>
             <label for="password">Password</label>
-            <input type="password" class="form-control" required-id="password" name="password">
+            <input type="password" class="form-control" required-id="password" name="password" required>
         </div>
         <button id="register_button" class="btn btn-primary" type="submit">
                 Register
@@ -15,4 +15,3 @@
         <span><p>Already have an account?</p><a href="/login">Login</a></span>
     </form>
 </div>
-{{> message}}
