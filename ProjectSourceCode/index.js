@@ -215,7 +215,7 @@ async function populate_items(){
       // Insert into items table with external API
       
       //store items in database
-      const query = "INSERT INTO items (name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5) returning item_id;"
+      const query = "INSERT INTO items (name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5) RETURNING item_id;"
       var clothing_items;
       fetch("https://fakestoreapi.com/products").then((res) => res.json()).then((json) => {
         clothing_items = json;
