@@ -1,0 +1,40 @@
+<!-- Goals: 
+- display profile image
+- display username (and encrypted password placeholder?)
+- stretch: change password
+- change profile img button with display of img options
+- display wishlisted items
+- delete wishlisted items button function
+-->
+
+<!-- Rounded image
+<img src="img" class="rounded-circle mt-4">
+-->
+
+<!--
+<div class="row">
+            {{#if wishlist.length}}
+                {{#each wishlist}}
+                <div class="col-md-4 mb-4">
+                    <div class="card" style="max-width: 200px; max-height: auto">
+                        <img src="{{#if this.item_img.length}}{{this.item_img}}{{else}}/resources/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.name}}" style="max-width: 200px; max-height: 400">
+                        <div class="card-body">
+                            <h5 class="card-title">{{this.name}}</h5>
+                            <p class="card-text">
+                               <!- - Add a description of the item in the card text - ->
+                                {{#if this.description}}
+                                    Description: {{this.description}}
+                                {{else}}
+                                    No outfit description.
+                                {{/if}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            {{else}}
+                <p>There are no items in your wishlist. Return to Discover to wishlist items you love!</p>
+                <!- - Add return to discover button? - ->
+            {{/if}}
+        </div>
+        -->
