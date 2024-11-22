@@ -10,9 +10,10 @@
        </form>
         <!-- Display cards -->
        <!-- Outline from events lab, will update with table data -->
-        {{!-- <div class="col mb-4">
-              <div class="card" id="example-card" style="max-width: 200px; max-height: auto">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIjilFX8N14B-U621mf8AHMFG_Xm2XR4pb_Q&s" class="card-img-top" alt="..." style="max-width: 200px; max-height: 300">
+    {{!--
+        <div class="col mb-4">
+              <div class="card" id="example-card" style="max-width: 400px; max-height: auto">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIjilFX8N14B-U621mf8AHMFG_Xm2XR4pb_Q&s" class="card-img-top" alt="..." <!--style="max-width: 200px; max-height: 300"--> >
                 <div class="card-body">
                   <h5 class="card-title">Tuxedo</h5>
                   <p class="card-text">A classy tuxedo for a formal occasion.</p>
@@ -28,9 +29,9 @@
         <div class="row">
             {{#if items.length}}
                 {{#each items}}
-                <div class="col-md-4 col-lg-3 mb-4 d-flex justify-content-center">
-                    <div class="card" style="max-width: 400px; max-height: auto;">
-                        <img src="{{#if this.item_img.length}}{{this.item_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.name}}">
+                <div class="col-md-4 mb-4">
+                    <div class="card" style="max-width: 400px; max-height: auto">
+                        <img src="{{#if this.item_img.length}}{{this.item_img}}{{else}}/resources/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.name}}" <!--style="max-width: 200px; max-height: 400"-->>
                         <div class="card-body">
                             <h5 class="card-title">{{this.name}}</h5>
                             <p class="card-text">
@@ -54,6 +55,7 @@
             {{else}}
                 <p>No items found.</p>
             {{/if}}
-        </div>
+            </div>
         </div>
     </div>
+</div>
