@@ -1,7 +1,7 @@
     <!-- Search button -->
        <form id="search-form">
-           <div class="input-group mb-3">
-               <input type="text" class="form-control" placeholder="Find Clothes" id="search-input" aria-label="Search">
+           <div class="input-group p-3">
+               <input type="text" class="form-control" placeholder="Find clothes!" id="search-input" aria-label="Search">
                <div class="input-group-append">
                    <button class="btn btn-outline-secondary" type="button">Search</button>
                </div>
@@ -9,7 +9,7 @@
        </form>
         <!-- Display cards -->
        <!-- Outline from events lab, will update with table data -->
-        <div class="col mb-4">
+        {{!-- <div class="col mb-4">
               <div class="card" id="example-card" style="max-width: 200px; max-height: auto">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIjilFX8N14B-U621mf8AHMFG_Xm2XR4pb_Q&s" class="card-img-top" alt="..." style="max-width: 200px; max-height: 300">
                 <div class="card-body">
@@ -22,13 +22,13 @@
                  </button>
                 </div>
               </div>
-            </div>
+            </div> --}}
         <div class="row">
             {{#if items.length}}
                 {{#each items}}
-                <div class="col-md-4 mb-4">
-                    <div class="card" style="max-width: 200px; max-height: auto">
-                        <img src="{{#if this.item_img.length}}{{this.item_img}}{{else}}/resources/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.name}}" style="max-width: 200px; max-height: 400">
+                <div class="col-md-4 mb-4 d-flex justify-content-center">
+                    <div class="card" style="max-width: 400px; max-height: auto  text-truncate">
+                        <img src="{{#if this.item_img.length}}{{this.item_img}}{{else}}/resources/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.name}}" <!--style="max-width: 200px; max-height: 400"-->>
                         <div class="card-body">
                             <h5 class="card-title">{{this.name}}</h5>
                             <p class="card-text">
