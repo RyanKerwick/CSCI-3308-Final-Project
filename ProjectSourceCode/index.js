@@ -215,7 +215,7 @@ async function populate_items(){
       // Insert into items table with external API
       
       //store items in database
-      const query = "INSERT INTO items (name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5) returning item_id;"
+      const query = "INSERT INTO items (name, item_img, price, category) VALUES ($1, $2, $3, $4) returning item_id;"
       var clothing_items;
       fetch("https://fakestoreapi.com/products").then((res) => res.json()).then((json) => {
         clothing_items = json;
@@ -234,12 +234,12 @@ async function populate_items(){
         //const query2 = "DELETE FROM items WHERE category = 'electronics'"
         //db.one(query).then(msg => console.log(msg)).catch(error => console.log(error));
 
-        console.log("Items table has been repopulated.");
+        // console.log("Items table has been repopulated.");
         return;
       });
     }
     else{
-      console.log("Items table already populated.")
+      // console.log("Items table already populated.")
       return;
     }
   })
