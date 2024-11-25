@@ -12,12 +12,14 @@ const bcrypt = require('bcryptjs'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
 app.use(express.static('public'));
 
+// ** allow public access to static css and img files **
+app.use(express.static(path.join(__dirname, 'src/resources')));
 
 // create `ExpressHandlebars` instance and configure the layouts and partials dir.
 const hbs = handlebars.create({
     extname: 'hbs',
     layoutsDir: __dirname + '/src/views/layouts',
-    partialsDir: __dirname + '/src/views/partials',
+    partialsDir: __dirname + '/src/views/partials'
 });
 
 
@@ -174,6 +176,33 @@ app.get('/discover', (req, res) => {
       .catch(error => console.log(error));
     }
   res.render('pages/discover.hbs',{items});
+});
+
+app.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if(err){
+      return res.status(500).send('Failed to destroy session');
+    }
+
+    res.render('pages/logout.hbs')
+
+  });
+});
+
+app.get('/profile', (req, res) => {
+  //store items in database
+  //const query = "INSERT INTO items (item_id, name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;"  
+  var items = [];
+  const query = "SELECT * FROM items WHERE item_id = $1;"
+  for (i = 1; i <= 20; i++) {
+      db.one(query,[i])
+      .then(item => {
+        console.log(item);
+        items.push(item);
+      })
+      .catch(error => console.log(error));
+    }
+  res.render('pages/profile.hbs',{items});
 });
 
 app.get('/logout', (req, res) => {

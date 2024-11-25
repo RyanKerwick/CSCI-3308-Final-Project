@@ -1,0 +1,24 @@
+/* Default body background, fonts, and text color*/
+body {
+    background-color: #70a8c6;
+    font-family: 'Trebuchet MS', sans-serif;
+  }
+  p {
+    color: #152238;
+    font-family: "Georgia";
+  }
+
+/* More bootstrap card customization */
+/*
+  .card {
+    background-color: #c3e0dd;
+}
+*/
+
+/* Navbar background and text color */
+.navbar-custom{
+  background-color: #436476;
+}
+.navbar-custom .nav-link {
+  color: whitesmoke !important; 
+}
