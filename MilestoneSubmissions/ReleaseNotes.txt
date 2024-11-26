@@ -11,3 +11,9 @@
 - Rendered website to login page
 - Header and title partial
 - Testing functionality
+
+11/20
+- Database is initialized properly
+- Discover now renders items correctly in cards
+- Login and register visuals updated
+- Discover visuals updated

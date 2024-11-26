@@ -1,5 +1,5 @@
 <header>
- <nav class="navbar navbar-expand-sm border-bottom">
+ <nav class="navbar navbar-expand-sm border-bottom navbar-custom">
    <div class="container">
      <button
        class="navbar-toggler ms-auto"
@@ -14,13 +14,17 @@
      <div class="collapse navbar-collapse" id="navbar-collapse">
        <ul class="navbar-nav me-auto">
          <li class="nav-item">
+           <!-- TODO: For Profile, add a <a> tag with an attribute href to call the '/profile' API -->
+           <a class="nav-link" href='/profile'>Profile</a>
+         </li>
+         <li class="nav-item">
            <!-- TODO: For Discover, add a <a> tag with an attribute href to call the '/discover' API -->
            <a class="nav-link" href='/discover'>Discover</a>
          </li>
        </ul>
        <div class="nav-item me-1">
          <!-- TODO: For Logout, add a <a> tag with an attribute href to call the '/logout API -->
-         <a class="nav-link" href='/logout'>logout</a>
+         <a class="nav-link" href='/logout'>Logout</a>
        </div>
      </div>
    </div>
