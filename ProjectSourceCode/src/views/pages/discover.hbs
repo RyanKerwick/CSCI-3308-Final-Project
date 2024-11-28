@@ -45,10 +45,16 @@
                                 {{/if}}
                             </p>
                             <!-- Wishlist button -->
-                            <button class="btn btn-outline-warning" style="border: none; background: none;"  id="addWishlistItem" data-outfit-id="{{this.id}}">
-                                <span class="bi bi-star-fill" style="color: orange;"></span>
-                                Wishlist
-                            </button>
+                            {{#if this.item_id}}
+                                <form action="/wishlist" method="POST" id="wishlistForm">
+                                    <button type="submit" class="btn btn-outline-warning" id="addWishlistItem" name="item_id" value="{{this.item_id}}">
+                                        <span class="bi bi-star-fill" style="color: orange;"></span>
+                                        Wishlist
+                                    </button>
+                                </form>
+                            {{else}}
+                                Unable to Wishlist
+                            {{/if}}
                         </div>
                     </div>
                 </div>

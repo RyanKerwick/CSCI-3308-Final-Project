@@ -150,32 +150,33 @@ app.post('/login', async (req, res) => {
 });
 
 // Authentication Middleware.
-// const auth = (req, res, next) => {
-//  if (!req.session.user) {
-//      // Default to login page.
-//      return res.redirect('/login');
-//  }
-//  next();
-//};
+const auth = (req, res, next) => {
+ if (!req.session.user) {
+     // Default to login page.
+     return res.redirect('/login');
+ }
+ next();
+};
 
 // Authentication Required
-// app.use(auth);
+app.use(auth);
 
 
-app.get('/discover', (req, res) => {
-  //store items in database
-  //const query = "INSERT INTO items (item_id, name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;"  
-  var items = [];
-  const query = "SELECT * FROM items WHERE item_id = $1;"
-  for (i = 1; i <= 20; i++) {
-      db.one(query,[i])
-      .then(item => {
-        console.log(item);
-        items.push(item);
-      })
-      .catch(error => console.log(error));
-    }
-  res.render('pages/discover.hbs',{items});
+app.get('/discover', async (req, res) => {
+  const items_query = "SELECT * FROM items";
+
+  const wishlist_query = "SELECT * FROM wishlist";
+  let wishlist_ids = await db.any(wishlist_query);
+  console.log(wishlist_ids);
+
+  try {
+    let items = await db.any(items_query);
+    res.render('pages/discover.hbs', {items});
+  }
+  catch (error) {
+    return console.log(error);
+  }
+
 });
 
 app.get('/logout', (req, res) => {
@@ -217,7 +218,37 @@ app.get('/logout', (req, res) => {
 });
 
 
+/*
+
+Wishlist POST API
+Adds entries to the wishlist table upon pressing the wishlist button on discover page.
+TODO:
+  Currently able to wishlist an item multiple times and make duplicate entries into the wishlist table. Needs fix.
+  Would like to update discover to disable the button for items already wishlisted by the user.
+  Also would like for the page to not refresh upon adding an item to the wishlist.
+*/
+
+
+app.post('/wishlist', (req, res) => {
+  const query = "INSERT INTO wishlist (username, id_item) VALUES ($1, $2) RETURNING *;";
+
+  db.one(query, [req.session.user.username, req.body.item_id])
+    .then(() => {
+      res.redirect('discover')
+      // res.status(200).json({ success: true, message: "Wishlist item added successfully!" });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ success: false, message: "Failed to add wishlist item." });
+    });
+});
+
+
+
+// -----------------------
 // Miscellaneous functions
+// -----------------------
+
 
 // Used in case queries may return nothing
 async function getQuery(query, args){
@@ -240,11 +271,11 @@ async function populate_items(){
   db.one(empty_query)
   .then((result) => {
     // console.log(result)
-    if(result.case == 0){
+    if(result.case == 0){ // Items table is empty
       // Insert into items table with external API
       
       //store items in database
-      const query = "INSERT INTO items (name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5) RETURNING item_id;"
+      const query = "INSERT INTO items (name, item_img, price, category) VALUES ($1, $2, $3, $4) returning item_id;"
       var clothing_items;
       fetch("https://fakestoreapi.com/products").then((res) => res.json()).then((json) => {
         clothing_items = json;
@@ -263,12 +294,12 @@ async function populate_items(){
         //const query2 = "DELETE FROM items WHERE category = 'electronics'"
         //db.one(query).then(msg => console.log(msg)).catch(error => console.log(error));
 
-        console.log("Items table has been repopulated.");
+        // console.log("Items table has been repopulated.");
         return;
       });
     }
     else{
-      console.log("Items table already populated.")
+      // console.log("Items table already populated.")
       return;
     }
   })
