@@ -10,36 +10,6 @@
         </div>
         <! Display cards >
         <! Outline from events lab, will update with table data>
-        {{#each clothing_items}}
-        <div class="col mb-4">
-            <div class="card" id="{{this.item_id}}">
-                <img src="{{this.item_img}}" class="card-img-top" alt="{{this.name}}">
-                <div class="card-body">
-                    <h5 class="card-title">{{this.name}}</h5>
-                    <p class="card-text">A classy tuxedo for a formal occasion.</p>
-                    <! Wishlist button>
-                    <button class="btn btn-secondary" data-outfit-id="{{this.id}}" data-outfit-name="{{this.name}}" data-outfit-description="{{this.description}}">
-                        Add to Wishlist
-                    </button>
-                </div>
-            </div>
-        </div>
-        {{/each}}
-
-        <div class="col mb-4">
-              <div class="card" id="example-card" style="max-width: 400px; max-height: auto">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIjilFX8N14B-U621mf8AHMFG_Xm2XR4pb_Q&s" class="card-img-top" alt="..." <!--style="max-width: 200px; max-height: 300"--> >
-                <div class="card-body">
-                  <h5 class="card-title">Tuxedo</h5>
-                  <p class="card-text">A classy tuxedo for a formal occasion.</p>
-                  <!-- Wishlist button -->
-                 <button class="btn" style="border: none; background: none;" data-outfit-id="{{this.id}}" data-outfit-name="{{this.name}}" data-outfit-description="{{this.description}}">
-                   <span class="bi bi-star-fill" style="color: orange;"></span>
-                   Wishlist
-                 </button>
-                </div>
-              </div>
-            </div> --}}
     <div class="container">
         <div class="row">
             {{#if items.length}}
@@ -59,10 +29,14 @@
                                 {{/if}}
                             </p>
                             <!-- Wishlist button -->
-                            <button class="btn btn-outline-warning" style="border: none; background: none;"  id="addWishlistItem" data-outfit-id="{{this.id}}">
+                            {{#if this.item_id}}
+                            <button class="btn btn-outline-warning" id="addWishlistItem" data-item-id="{{this.item_id}}">
                                 <span class="bi bi-star-fill" style="color: orange;"></span>
                                 Wishlist
                             </button>
+                            {{else}}
+                                Unable to Wishlist
+                            {{/if}}
                         </div>
                     </div>
                 </div>
@@ -73,3 +47,31 @@
         </div>
         </div>
     </div>
+<script>
+    document.getElementById('addWishlistItem').addEventListener('click', async function (event) {
+        event.preventDefault(); // Prevent the default form submission (page refresh)
+
+        const formData = {
+            item_id: document.getElementById('addWishlistItem').value,
+        };
+
+        try {
+            const response = await fetch('/wishlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                console.log('Data saved successfully!');
+            } else {
+                console.log('Error: ' + result.message);
+            }
+        } catch (error) {
+            console.log('An error occurred: ' + error.message);
+        }
+    });
+</script>

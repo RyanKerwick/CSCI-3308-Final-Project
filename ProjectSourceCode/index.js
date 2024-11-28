@@ -150,32 +150,29 @@ app.post('/login', async (req, res) => {
 });
 
 // Authentication Middleware.
-// const auth = (req, res, next) => {
-//  if (!req.session.user) {
-//      // Default to login page.
-//      return res.redirect('/login');
-//  }
-//  next();
-//};
+const auth = (req, res, next) => {
+ if (!req.session.user) {
+     // Default to login page.
+     return res.redirect('/login');
+ }
+ next();
+};
 
 // Authentication Required
 // app.use(auth);
 
 
-app.get('/discover', (req, res) => {
-  //store items in database
-  //const query = "INSERT INTO items (item_id, name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;"  
-  var items = [];
-  const query = "SELECT * FROM items WHERE item_id = $1;"
-  for (i = 1; i <= 20; i++) {
-      db.one(query,[i])
-      .then(item => {
-        console.log(item);
-        items.push(item);
-      })
-      .catch(error => console.log(error));
-    }
-  res.render('pages/discover.hbs',{items});
+app.get('/discover', async (req, res) => {
+  const items_query = "SELECT * FROM items"
+
+  try {
+    let items = await db.any(items_query);
+    res.render('pages/discover.hbs', {items});
+  }
+  catch (error) {
+    return console.log(error);
+  }
+
 });
 
 app.get('/logout', (req, res) => {
@@ -217,7 +214,25 @@ app.get('/logout', (req, res) => {
 });
 
 
+app.post('/wishlist', (req, res) => {
+  const query = "INSERT INTO wishlist (username, id_item) VALUES ($1, $2) RETURNING *;";
+
+  db.one(query, [req.session.user.username, req.body.item_id])
+    .then(() => {
+      res.status(200).json({ success: true, message: "Wishlist item added successfully!" });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ success: false, message: "Failed to add wishlist item." });
+    });
+});
+
+
+
+// -----------------------
 // Miscellaneous functions
+// -----------------------
+
 
 // Used in case queries may return nothing
 async function getQuery(query, args){
@@ -244,11 +259,7 @@ async function populate_items(){
       // Insert into items table with external API
       
       //store items in database
-<<<<<<< HEAD
       const query = "INSERT INTO items (name, item_img, price, category) VALUES ($1, $2, $3, $4) returning item_id;"
-=======
-      const query = "INSERT INTO items (name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5) RETURNING item_id;"
->>>>>>> a769d048ec690217ef83497400356ccdb41a3af6
       var clothing_items;
       fetch("https://fakestoreapi.com/products").then((res) => res.json()).then((json) => {
         clothing_items = json;

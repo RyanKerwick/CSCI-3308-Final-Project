@@ -14,6 +14,8 @@ CREATE TABLE IF NOT EXISTS items (
 );
 
 CREATE TABLE IF NOT EXISTS wishlist (
-    id_user INT NOT NULL,
-    id_item INT NOT NULL
+    username VARCHAR(100) NOT NULL,
+    id_item INT NOT NULL,
+    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE,
+    FOREIGN KEY (id_item) REFERENCES items(item_id) ON DELETE CASCADE
 );

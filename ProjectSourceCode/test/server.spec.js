@@ -114,3 +114,47 @@ describe('Testing Login API', () => {
   });
 });
 // ********************************************************************************
+
+
+describe('Testing Wishlist API', () => {
+
+  // Wishlist Positive Testcase :
+  // API: /wishlist
+  // Input: {item_id = 1}
+  // Expect: res.status == 200 and res.body.message == 'Success'
+  // Result: This test case should pass and return a status 200 along with a "Success" message.
+  // Explanation: The testcase will call the /wishlist API with the following input
+  // and expects the API to return a status of 200 along with the "Success" message.
+
+  it('positive : /wishlist', done => {
+    chai
+      .request(server)
+      .post('wishlist')
+      .send({item_id: 1})
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body.message).to.equals('Success');
+        done();
+      });
+  });
+
+  // Wishlist Negative Testcase :
+  // API: /wishlist
+  // Input: {item_id = 100}, out of range
+  // Expect: res.status == 200 and res.body.message == 'Success'
+  // Result: This test case should pass and return a status 400 along with a "Invalid input" message.
+  // Explanation: The testcase will call the /wishlist API with the following invalid inputs
+  // and expects the API to return a status of 400 along with the "Invalid input" message.
+
+  it('negative : /wishlist', done => {
+    chai
+      .request(server)
+      .post('wishlist')
+      .send({item_id: 100})
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body.message).to.equals('Success');
+        done();
+      })
+  })
+});
