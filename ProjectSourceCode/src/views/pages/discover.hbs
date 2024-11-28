@@ -1,4 +1,4 @@
-<h1 style="text-align: center;"> Discover </h1>
+<h1 style="text-align: center;"> Find Your Fit </h1>
     <!-- Search button -->
        <form id="search-form">
            <div class="input-group p-3">
@@ -7,9 +7,25 @@
                    <button class="btn btn-dark" type="button">Search</button>
                </div>
             </div>
-        </div>
-        <! Display cards >
-        <! Outline from events lab, will update with table data>
+       </form>
+<body style="background: url('/img/discover_bg.jpeg') no-repeat center center fixed; background-size: cover; margin: 0; height: 100vh;"></body>
+        <!-- Display cards -->
+       <!-- Outline from events lab, will update with table data -->
+    {{!--
+        <div class="col mb-4">
+              <div class="card" id="example-card" style="max-width: 400px; max-height: auto">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIjilFX8N14B-U621mf8AHMFG_Xm2XR4pb_Q&s" class="card-img-top" alt="..." <!--style="max-width: 200px; max-height: 300"--> >
+                <div class="card-body">
+                  <h5 class="card-title">Tuxedo</h5>
+                  <p class="card-text">A classy tuxedo for a formal occasion.</p>
+                  <!-- Wishlist button -->
+                 <button class="btn" style="border: none; background: none;" data-outfit-id="{{this.id}}" data-outfit-name="{{this.name}}" data-outfit-description="{{this.description}}">
+                   <span class="bi bi-star-fill" style="color: orange;"></span>
+                   Wishlist
+                 </button>
+                </div>
+              </div>
+            </div> --}}
     <div class="container">
         <div class="row">
             {{#if items.length}}

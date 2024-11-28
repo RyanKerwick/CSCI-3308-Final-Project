@@ -7,7 +7,14 @@ body {
     color: #152238;
     font-family: "Georgia";
   }
+h1 {
+  color: #2E5A88;
 
+}
+h3 {
+  color: whitesmoke
+}
+/* #70a8c6 */
 /* More bootstrap card customization */
 /*
   .card {
@@ -21,4 +28,13 @@ body {
 }
 .navbar-custom .nav-link {
   color: whitesmoke !important; 
+}
+
+.img-rounded{
+  border-radius: 20%;
+}
+
+.button-container {
+  text-align: center;
+  margin-top: 40px;
 }

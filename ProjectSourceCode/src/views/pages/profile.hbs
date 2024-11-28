@@ -6,19 +6,73 @@
 - display wishlisted items
 - delete wishlisted items button function
 -->
-<h1 style="text-align: center;"> abc's Profile</h1>
+<!-- <h1 style="text-align: center;"> abc's Profile</h1> -->
 
-<!-- Avatar placeholder -->
-<div style="text-align: center">
-    <img src="/img/avatar1_woman.jpeg" class="rounded-circle mt-4" width="300px;">
+
+<!-- User profile image on the left-->
+<div class="container text-center my-5">
+    <div class="row justify-content-start align-items-center">
+        <div class="col-md-4 col-12 mb-3">
+            <img src="/img/default_pfp.jpg" alt="Profile Image" class="img-fluid rounded-circle mb-3">
+        </div>
+
+        <!-- User info on the right -->
+
+        <div class="col-md-8 col-12 mb-3 d-flex justify-content-end">
+            <div class="card bg-light mx-5" style="width: 20rem; height: 15rem;">
+                <div class="card-body">
+                    <h5 class="card-title">User Info</h5>
+                    <p class="card-text" style="margin-top: 40px;">
+                        Username: {{username}}
+                    </p>
+                    <p class="card-text" style="margin-top: 40px;">
+                        Password: *****
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button aligned under profile image -->
+    <div class="row justify-content-start">
+        <div class="col-auto">
+            <button type="button" class="btn btn-primary btn-sm" style="margin-left: 125px;">Update Profile Picture</button>
+        </div>
+    </div>
 </div>
-
-<!-- Username placeholder -->
 
 <!-- Created id's for Wishlist buttons: "addWishlistItem" in discover and "removeWishlistItem" in profile for api functions-->
 
 <h3 style="text-align: center;">Saved Outfits</h3>
-<!-- <h2>{username}'s Wishlist</h2>  Need api route if we want to display an interactive subtitle-->
+
+<!-- display the top and bottom for each set of outfits and the item titles -->
+
+{{!-- Outfit code is commented out until backend is done, otherwise page won't load
+<div class="container">
+        <div class="row">
+            {{#if outfits.length}}
+                {{#each outfits}}
+                <div class="card outfit-card">
+                    <div class="card top-card">
+                        <div class="top">
+                            <img src="{{#if this.top_img.length}}{{this.top_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.top_name}}">
+                            <h5 class="card-title">{{this.top_name}}</h5>
+                        </div>
+                    </div>
+                    <div class="card bottom-card">
+                        <div class="bottom">
+                            <img src="{{#if this.bottom_img.length}}{{this.bottom_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-bottom" alt="{{this.bottom_name}}">
+                            <h5 class="card-title">{{this.bottom_name}}</h5>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-danger" style="border: none; background: none;" id="removeOutfit" data-outfit-id="{{this.id}}">
+                                <span class="bi bi-trash-fill" style="color: black;"></span>
+                                Delete
+                    </button>
+                </div>
+        </div>
+</div>
+--}}
 
 <h3 style="text-align: center;">Wishlist</h3>
 
