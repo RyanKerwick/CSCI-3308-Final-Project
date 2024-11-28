@@ -46,10 +46,12 @@
                             </p>
                             <!-- Wishlist button -->
                             {{#if this.item_id}}
-                            <button class="btn btn-outline-warning" id="addWishlistItem" data-item-id="{{this.item_id}}">
-                                <span class="bi bi-star-fill" style="color: orange;"></span>
-                                Wishlist
-                            </button>
+                                <form action="/wishlist" method="POST" id="wishlistForm">
+                                    <button type="submit" class="btn btn-outline-warning" id="addWishlistItem" name="item_id" value="{{this.item_id}}">
+                                        <span class="bi bi-star-fill" style="color: orange;"></span>
+                                        Wishlist
+                                    </button>
+                                </form>
                             {{else}}
                                 Unable to Wishlist
                             {{/if}}
@@ -63,31 +65,3 @@
         </div>
         </div>
     </div>
-<script>
-    document.getElementById('addWishlistItem').addEventListener('click', async function (event) {
-        event.preventDefault(); // Prevent the default form submission (page refresh)
-
-        const formData = {
-            item_id: document.getElementById('addWishlistItem').value,
-        };
-
-        try {
-            const response = await fetch('/wishlist', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-
-            const result = await response.json();
-            if (result.success) {
-                console.log('Data saved successfully!');
-            } else {
-                console.log('Error: ' + result.message);
-            }
-        } catch (error) {
-            console.log('An error occurred: ' + error.message);
-        }
-    });
-</script>

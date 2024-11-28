@@ -159,11 +159,15 @@ const auth = (req, res, next) => {
 };
 
 // Authentication Required
-// app.use(auth);
+app.use(auth);
 
 
 app.get('/discover', async (req, res) => {
-  const items_query = "SELECT * FROM items"
+  const items_query = "SELECT * FROM items";
+
+  const wishlist_query = "SELECT * FROM wishlist";
+  let wishlist_ids = await db.any(wishlist_query);
+  console.log(wishlist_ids);
 
   try {
     let items = await db.any(items_query);
@@ -214,12 +218,24 @@ app.get('/logout', (req, res) => {
 });
 
 
+/*
+
+Wishlist POST API
+Adds entries to the wishlist table upon pressing the wishlist button on discover page.
+TODO:
+  Currently able to wishlist an item multiple times and make duplicate entries into the wishlist table. Needs fix.
+  Would like to update discover to disable the button for items already wishlisted by the user.
+  Also would like for the page to not refresh upon adding an item to the wishlist.
+*/
+
+
 app.post('/wishlist', (req, res) => {
   const query = "INSERT INTO wishlist (username, id_item) VALUES ($1, $2) RETURNING *;";
 
   db.one(query, [req.session.user.username, req.body.item_id])
     .then(() => {
-      res.status(200).json({ success: true, message: "Wishlist item added successfully!" });
+      res.redirect('discover')
+      // res.status(200).json({ success: true, message: "Wishlist item added successfully!" });
     })
     .catch((err) => {
       console.error(err);
