@@ -15,7 +15,17 @@ CREATE TABLE IF NOT EXISTS items (
 
 CREATE TABLE IF NOT EXISTS wishlist (
     username VARCHAR(100) NOT NULL,
-    id_item INT NOT NULL,
+    item_id INT NOT NULL,
     FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE,
-    FOREIGN KEY (id_item) REFERENCES items(item_id) ON DELETE CASCADE
+    FOREIGN KEY (item_id) REFERENCES items(item_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS outfits (
+    outfit_id SERIAL PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    item_id_1 INT NOT NULL,
+    item_id_2 INT,
+    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE,
+    FOREIGN KEY (item_id_1) REFERENCES items(item_id) ON DELETE CASCADE,
+    FOREIGN KEY (item_id_2) REFERENCES items(item_id) ON DELETE CASCADE
 );

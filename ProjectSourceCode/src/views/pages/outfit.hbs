@@ -1,0 +1,75 @@
+<div class="container">
+    <h1><b>Outfit Creator</b></h1>
+    <h3>Select up to 3 items to create your outfit.</h3>
+
+    <form action="/outfit" method="POST" id="outfitForm">
+        <!-- Submit button -->
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary" id="submitOutfit" disabled>Submit Selected Items</button>
+        </div>
+        {{#if items.length}}
+            {{#each items}}
+            <div class="col-md-3 col-lg-2 mb-4 d-flex justify-content-center">
+                <div class="card" style="max-width: 100px; max-height: auto">
+                    <img src="{{#if this.item_img.length}}{{this.item_img}}{{else}}/resources/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.name}}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.name}}</h5>
+                        <p class="card-text">
+                            {{#if this.description}}
+                                {{this.description}}
+                            {{else}}
+                                No outfit description.
+                            {{/if}}
+                        </p>
+                        <!-- Checkbox for selection -->
+                        {{#if this.item_id}}
+                            <div class="form-check">
+                                <input 
+                                    type="checkbox" 
+                                    class="form-check-input outfit-checkbox" 
+                                    id="itemCheckbox{{@index}}" 
+                                    name="item_ids" 
+                                    value="{{this.item_id}}">
+                                <label class="form-check-label" for="itemCheckbox{{@index}}">
+                                    Select Item
+                                </label>
+                            </div>
+                        {{else}}
+                            Unable to select item.
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        {{else}}
+            <p>No items found.</p>
+        {{/if}}
+    </form>
+
+
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const checkboxes = document.querySelectorAll(".outfit-checkbox");
+        const submitButton = document.getElementById("submitOutfit");
+        const maxSelections = 2;
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", () => {
+                const selected = Array.from(checkboxes).filter(cb => cb.checked).length;
+
+                // Enable or disable checkboxes and submit button based on the selection count
+                if (selected >= maxSelections) {
+                    checkboxes.forEach(cb => {
+                        if (!cb.checked) cb.disabled = true;
+                    });
+                } else {
+                    checkboxes.forEach(cb => cb.disabled = false);
+                }
+
+                // Enable the submit button if at least one item is selected
+                submitButton.disabled = selected === 0;
+            });
+        });
+    });
+</script>
