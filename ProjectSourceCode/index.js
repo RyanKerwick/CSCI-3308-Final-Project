@@ -165,10 +165,6 @@ app.use(auth);
 app.get('/discover', async (req, res) => {
   const items_query = "SELECT * FROM items";
 
-  const wishlist_query = "SELECT * FROM wishlist";
-  let wishlist_ids = await db.any(wishlist_query);
-  console.log(wishlist_ids);
-
   try {
     let items = await db.any(items_query);
     res.render('pages/discover.hbs', {items});
@@ -191,20 +187,19 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/profile', (req, res) => {
-  //store items in database
-  //const query = "INSERT INTO items (item_id, name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;"  
   var items = [];
-  const query = "SELECT * FROM items WHERE item_id = $1;"
-  for (i = 1; i <= 20; i++) {
-      db.one(query,[i])
-      .then(item => {
-        console.log(item);
-        items.push(item);
-      })
-      .catch(error => console.log(error));
-    }
-  res.render('pages/profile.hbs',{items});
+  printWishlist();
+  const query = `SELECT * FROM items INNER JOIN wishlist ON items.item_id = wishlist.id_item WHERE wishlist.username = $1;`
+  db.any(query, req.session.user.username)
+  .then((items) => {
+    console.log(items);
+    res.render('pages/profile.hbs', {username: req.session.user.username, items});
+  })
+  .catch(err => {
+    return console.log(err);
+  })
 });
+
 
 app.get('/logout', (req, res) => {
   req.session.destroy(err => {
@@ -275,7 +270,7 @@ async function populate_items(){
       // Insert into items table with external API
       
       //store items in database
-      const query = "INSERT INTO items (name, item_img, price, category) VALUES ($1, $2, $3, $4) returning item_id;"
+      const query = "INSERT INTO items (name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5) returning item_id;"
       var clothing_items;
       fetch("https://fakestoreapi.com/products").then((res) => res.json()).then((json) => {
         clothing_items = json;
@@ -305,6 +300,28 @@ async function populate_items(){
   })
   .catch(err => {
     console.log(err);
+  })
+}
+
+function printItems(){
+  let query = "SELECT * FROM items;"
+  db.any(query)
+  .then((data) => {
+    console.log(data);
+  })
+  .catch(err => {
+    return console.log(err);
+  })
+}
+
+function printWishlist(){
+  let query = "SELECT * FROM wishlist;"
+  db.any(query)
+  .then((data) => {
+    console.log(data);
+  })
+  .catch(err => {
+    return console.log(err);
   })
 }
 
