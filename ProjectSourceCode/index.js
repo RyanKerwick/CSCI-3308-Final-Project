@@ -39,7 +39,6 @@ const db = pgp(dbConfig);
 db.connect()
   .then(obj => {
     console.log('Database connection successful'); // you can view this message in the docker compose logs
-    // console.log(obj);
 
     //  ---------------------------------------------------------------------
     //  TODO: If Database is empty, add the items from the API in a function. This shouldn't happen every time we recieve a discover Post request
@@ -186,17 +185,25 @@ app.get('/logout', (req, res) => {
   });
 });
 
-app.get('/profile', (req, res) => {
-  var items = [];
-  printWishlist();
-  const query = `SELECT * FROM items INNER JOIN wishlist ON items.item_id = wishlist.id_item WHERE wishlist.username = $1;`
-  db.any(query, req.session.user.username)
-  .then((items) => {
-    console.log(items);
-    res.render('pages/profile.hbs', {username: req.session.user.username, items});
+app.get('/profile', async (req, res) => {
+  const username = req.session.user.username;
+  const query_outfit_1 = 'SELECT * FROM items INNER JOIN outfits ON items.item_id = outfits.item_id_1 WHERE outfits.username = $1;';
+  const query_outfit_2 = 'SELECT * FROM items INNER JOIN outfits ON items.item_id = outfits.item_id_2 WHERE outfits.username = $1;';
+  const query_wishlist = `SELECT * FROM items INNER JOIN wishlist ON items.item_id = wishlist.item_id WHERE wishlist.username = $1;`;
+
+  db.task(async t => {
+    const outfits_1 = await t.any(query_outfit_1, [username]);
+    const outfits_2 = await t.any(query_outfit_2, [username]);
+    const items = await t.any(query_wishlist, [username]);
+
+    console.log("Outfits 1: ", outfits_1);
+    console.log("Outfits 2: ", outfits_2);
+    let outfits = outfits_1.map((item, index) => [item, outfits_2[index]]);
+    console.log("Overall Outfits: ", outfits);
+    return {outfits, items};
   })
-  .catch(err => {
-    return console.log(err);
+  .then(data => {
+    res.render('pages/profile.hbs', {username, outfits: data.outfits, items: data.items})
   })
 });
 
@@ -225,7 +232,7 @@ TODO:
 
 
 app.post('/wishlist', (req, res) => {
-  const query = "INSERT INTO wishlist (username, id_item) VALUES ($1, $2) RETURNING *;";
+  const query = "INSERT INTO wishlist (username, item_id) VALUES ($1, $2) RETURNING *;";
 
   db.one(query, [req.session.user.username, req.body.item_id])
     .then(() => {
@@ -238,7 +245,36 @@ app.post('/wishlist', (req, res) => {
     });
 });
 
+/*
+outfit GET API
+Takes user to outfit creator page
+*/
+app.get('/outfit', (req, res) => {
+  const query = 'SELECT * FROM items;';
+  db.any(query)
+  .then((items) => {
+    res.render('pages/outfit', {items});
+  })
+  .catch(err => {
+    return console.log(err);
+  })
+})
 
+/*
+outfit POST API
+Adds entry to outfits table, holds up to 3 items, should add top items before bottom items so that the outfit is displayed correctly
+*/
+
+app.post('/outfit', (req, res) => {
+  const query = "INSERT INTO outfits (username, item_id_1, item_id_2) VALUES ($1, $2, $3) RETURNING *;";
+  db.any(query, [req.session.user.username, req.body.item_ids[0], req.body.item_ids[1]])
+  .then(() => {
+    res.redirect('profile');
+  })
+  .catch(err => {
+    return console.log(err);
+  })
+})
 
 // -----------------------
 // Miscellaneous functions
@@ -252,7 +288,7 @@ async function getQuery(query, args){
     return result;
   }
   catch(err){
-    // console.log(err);
+    console.log(err);
     return null;
   }
 }
@@ -318,6 +354,17 @@ function printWishlist(){
   let query = "SELECT * FROM wishlist;"
   db.any(query)
   .then((data) => {
+    console.log(data);
+  })
+  .catch(err => {
+    return console.log(err);
+  })
+}
+
+function printOutfits(){
+  let query = "SELECT * FROM outfits;";
+  db.any(query)
+  .then(data => {
     console.log(data);
   })
   .catch(err => {

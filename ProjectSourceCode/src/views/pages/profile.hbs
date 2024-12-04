@@ -21,13 +21,18 @@
         <div class="col-md-8 col-12 mb-3 d-flex justify-content-end">
             <div class="card bg-light mx-5" style="width: 20rem; height: 15rem;">
                 <div class="card-body">
-                    <h5 class="card-title">User Info</h5>
-                    <p class="card-text" style="margin-top: 40px;">
+                    <h5 class="card-title" style="bold"><b>User Info</b></h5>
+                    <p class="card-text" style="margin-top: 20px;">
                         Username: {{username}}
                     </p>
-                    <p class="card-text" style="margin-top: 40px;">
-                        Password: *****
+                    <p class="card-text" style="margin-top: 20px;">
+                        Password: ******
                     </p>
+                    {{!-- <form action="/change-password" method="GET"> --}}
+                        <button type="button" class="btn btn-primary btn-sm" style="margin-top: 30px">
+                            Change Password
+                        </button>
+                    {{!-- </form> --}}
                 </div>
             </div>
         </div>
@@ -45,57 +50,65 @@
 
 <h3 style="text-align: center;">Saved Outfits</h3>
 
-<!-- display the top and bottom for each set of outfits and the item titles -->
+<form action="/outfit" method="GET" style="margin: auto; width:20%;">
+    <button type="submit" class="btn btn-primary btn-lg">Create an Outfit</button>
+</form>
 
-{{!-- Outfit code is commented out until backend is done, otherwise page won't load
 <div class="container">
-        <div class="row">
-            {{#if outfits.length}}
-                {{#each outfits}}
-                <div class="card outfit-card">
-                    <div class="card top-card">
-                        <div class="top">
-                            <img src="{{#if this.top_img.length}}{{this.top_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.top_name}}">
-                            <h5 class="card-title">{{this.top_name}}</h5>
+    <div class="row">
+        {{#if outfits.length}}
+            {{#each outfits}}
+                <div class="col-md-5 col-lg-4 mb-4 d-flex justify-content-center">
+                    <!-- Top outfit -->
+                    {{#if this.[0]}}
+                        <div class="card" style="max-width: 600px; max-height: auto;">
+                            <img src="{{#if this.[0].item_img}}{{this.[0].item_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.[0].name}}">
                         </div>
-                    </div>
-                    <div class="card bottom-card">
-                        <div class="bottom">
-                            <img src="{{#if this.bottom_img.length}}{{this.bottom_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-bottom" alt="{{this.bottom_name}}">
-                            <h5 class="card-title">{{this.bottom_name}}</h5>
+                    {{else}}
+                        <p>No top outfit.</p>
+                    {{/if}}
+
+                    <!-- Bottom outfit -->
+                    {{#if this.[1]}}
+                        <div class="card" style="max-width: 600px; max-height: auto;">
+                            <img src="{{#if this.[1].item_img}}{{this.[1].item_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.[1].name}}">
                         </div>
-                    </div>
-                    <button class="btn btn-outline-danger" style="border: none; background: none;" id="removeOutfit" data-outfit-id="{{this.id}}">
-                                <span class="bi bi-trash-fill" style="color: black;"></span>
-                                Delete
-                    </button>
+                    {{else}}
+                        <p>No bottom outfit.</p>
+                    {{/if}}
                 </div>
-        </div>
+            {{/each}}
+        {{else}}
+            <p>No outfits found.</p>
+        {{/if}}
+
+    </div>
 </div>
---}}
+
+<!-- display the top and bottom for each set of outfits and the item titles -->
 
 <h3 style="text-align: center;">Wishlist</h3>
 
-<div class="container">
+<div class="container" style="width: 70%">
         <div class="row">
             {{#if items.length}}
                 {{#each items}}
-                <div class="col-md-4 col-lg-3 mb-4 d-flex justify-content-center">
-                    <div class="card" style="max-width: 400px; max-height: auto;">
-                        <img src="{{#if this.item_img.length}}{{this.item_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.name}}" <!--style="max-width: 200px; max-height: 400"-->>
+                <div class="col-md-3 col-lg-2 mb-4 d-flex justify-content-center">
+                    <div class="card" style="max-width: 200px; max-height: auto;">
+                        <img src="{{#if this.item_img.length}}{{this.item_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.name}}">
                         <div class="card-body">
-                            <h5 class="card-title">{{this.name}}</h5>
+                            <h5 class="card-title fs-6">{{this.name}}</h5>
                             <p class="card-text">
                                <!-- Based on api, might be able to add description tags -->
                                <!-- Add a description of the item in the card text -->
-                                {{#if this.description}}
+                                {{!-- {{#if this.description}}
                                     {{this.description}}
                                 {{else}}
                                     No outfit description.
-                                {{/if}}
+                                {{/if}} --}}
                             </p>
                             <!-- Wishlist button -->
-                            <button class="btn btn-outline-danger" style="border: none; background: none;" id="removeWishlistItem" data-outfit-id="{{this.id}}">
+                            <button class="btn btn-outline-danger" id="removeWishlistItem" data-outfit-id="{{this.id}}">
                                 <span class="bi bi-trash-fill" style="color: black;"></span>
                                 Delete
                             </button>
