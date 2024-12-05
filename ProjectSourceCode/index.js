@@ -289,10 +289,19 @@ outfit GET API
 Takes user to outfit creator page
 */
 app.get('/outfit', (req, res) => {
-  const query = 'SELECT * FROM items;';
-  db.any(query)
-  .then((items) => {
-    res.render('pages/outfit', {items});
+  const query_items = 'SELECT * FROM items;';
+  const query_wishlist = "SELECT * FROM items JOIN wishlist ON items.item_id = wishlist.item_id WHERE wishlist.username = $1;";
+
+  let items;
+  let wishlist_items;
+
+  db.task(async t => {
+    items = await t.any(query_items);
+    wishlist_items = await t.any(query_wishlist, [req.session.user.username]);
+    return {items, wishlist_items};
+  })
+  .then(data => {
+    return res.render('pages/outfit', {items, wishlist_items});
   })
   .catch(err => {
     return console.log(err);
