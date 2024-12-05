@@ -68,10 +68,28 @@
                         <p>No top outfit.</p>
                     {{/if}}
 
-                    <!-- Bottom outfit -->
+                    <!-- 2nd outfit piece -->
                     {{#if this.[1]}}
                         <div class="card" style="max-width: 600px; max-height: auto;">
                             <img src="{{#if this.[1].item_img}}{{this.[1].item_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.[1].name}}">
+                        </div>
+                    {{else}}
+                        <p>No 2nd piece.</p>
+                    {{/if}}
+
+                    <!-- 3rd outfit piece -->
+                    {{#if this.[2]}}
+                        <div class="card" style="max-width: 600px; max-height: auto;">
+                            <img src="{{#if this.[2].item_img}}{{this.[2].item_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.[2].name}}">
+                        </div>
+                    {{else}}
+                        <p>No 3rd piece.</p>
+                    {{/if}}
+
+                    <!-- Bottom outfit -->
+                    {{#if this.[3]}}
+                        <div class="card" style="max-width: 600px; max-height: auto;">
+                            <img src="{{#if this.[3].item_img}}{{this.[3].item_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.[3].name}}">
                         </div>
                     {{else}}
                         <p>No bottom outfit.</p>

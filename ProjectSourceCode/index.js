@@ -189,16 +189,22 @@ app.get('/profile', async (req, res) => {
   const username = req.session.user.username;
   const query_outfit_1 = 'SELECT * FROM items INNER JOIN outfits ON items.item_id = outfits.item_id_1 WHERE outfits.username = $1;';
   const query_outfit_2 = 'SELECT * FROM items INNER JOIN outfits ON items.item_id = outfits.item_id_2 WHERE outfits.username = $1;';
+  const query_outfit_3 = 'SELECT * FROM items INNER JOIN outfits ON items.item_id = outfits.item_id_3 WHERE outfits.username = $1;';
+  const query_outfit_4 = 'SELECT * FROM items INNER JOIN outfits ON items.item_id = outfits.item_id_4 WHERE outfits.username = $1;';
   const query_wishlist = `SELECT * FROM items INNER JOIN wishlist ON items.item_id = wishlist.item_id WHERE wishlist.username = $1;`;
 
   db.task(async t => {
     const outfits_1 = await t.any(query_outfit_1, [username]);
     const outfits_2 = await t.any(query_outfit_2, [username]);
+    const outfits_3 = await t.any(query_outfit_3, [username]);
+    const outfits_4 = await t.any(query_outfit_4, [username]);
     const items = await t.any(query_wishlist, [username]);
 
     console.log("Outfits 1: ", outfits_1);
     console.log("Outfits 2: ", outfits_2);
-    let outfits = outfits_1.map((item, index) => [item, outfits_2[index]]);
+    console.log("Outfits 3: ", outfits_3);
+    console.log("Outfits 4: ", outfits_4);
+    let outfits = outfits_1.map((item, index) => [item, outfits_2[index], outfits_3[index], outfits_4[index]]);
     console.log("Overall Outfits: ", outfits);
     return {outfits, items};
   })
@@ -266,8 +272,8 @@ Adds entry to outfits table, holds up to 3 items, should add top items before bo
 */
 
 app.post('/outfit', (req, res) => {
-  const query = "INSERT INTO outfits (username, item_id_1, item_id_2) VALUES ($1, $2, $3) RETURNING *;";
-  db.any(query, [req.session.user.username, req.body.item_ids[0], req.body.item_ids[1]])
+  const query = "INSERT INTO outfits (username, item_id_1, item_id_2, item_id_3, item_id_4) VALUES ($1, $2, $3, $4, $5) RETURNING *;";
+  db.any(query, [req.session.user.username, req.body.item_ids[0], req.body.item_ids[1], req.body.item_ids[2], req.body.item_ids[3]])
   .then(() => {
     res.redirect('profile');
   })
@@ -308,25 +314,94 @@ async function populate_items(){
       //store items in database
       const query = "INSERT INTO items (name, item_img, price, category, description) VALUES ($1, $2, $3, $4, $5) returning item_id;"
       var clothing_items;
-      fetch("https://fakestoreapi.com/products").then((res) => res.json()).then((json) => {
-        clothing_items = json;
-        // console.log(clothing_items);
 
-        ci_length = Object.keys(json).length;
+      //populate with shirts
+      fetch("https://ecom.webscrapingapi.com/v1?q=shirt&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+        clothing_items = json;
+
+        ci_length = 10;
         // console.log(ci_length);
 
         for (i = 0; i < ci_length; i++) {
-          db.one(query, [clothing_items[i].title, clothing_items[i].image, clothing_items[i].price, clothing_items[i].category, clothing_items[i].description])
-          // .then(msg => console.log(msg))
-          .catch(error => console.log(error));
+          if (!(typeof clothing_items.search_results.product_results[i].price === "undefined")) {
+            db.one(query, [clothing_items.search_results.product_results[i].title, clothing_items.search_results.product_results[i].thumbnail, clothing_items.search_results.product_results[i].price.value, "shirt", clothing_items.search_results.product_results[i].brand])
+            // .then(msg => console.log(msg))
+            .catch(error => console.log(error));
+          }
         }
-
-        //delete electronic items
-        //const query2 = "DELETE FROM items WHERE category = 'electronics'"
-        //db.one(query).then(msg => console.log(msg)).catch(error => console.log(error));
 
         // console.log("Items table has been repopulated.");
         return;
+      });
+
+      //populate with blouses (still have "shirt" category tag but very few women's shirts come up with previous search)
+      fetch("https://ecom.webscrapingapi.com/v1?q=blouse&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+        clothing_items = json;
+        ci_length = 10;
+        for (i = 0; i < ci_length; i++) {
+          if (!(typeof clothing_items.search_results.product_results[i].price === "undefined")) {
+            db.one(query, [clothing_items.search_results.product_results[i].title, clothing_items.search_results.product_results[i].thumbnail, clothing_items.search_results.product_results[i].price.value, "shirt", clothing_items.search_results.product_results[i].brand])
+            // .then(msg => console.log(msg))
+            .catch(error => console.log(error));
+          }
+        }
+        return;
+      });
+
+      //populate with jeans
+      fetch("https://ecom.webscrapingapi.com/v1?q=jeans&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+        clothing_items = json;
+        ci_length = 10;
+        for (i = 0; i < ci_length; i++) {
+          if (!(typeof clothing_items.search_results.product_results[i].price === "undefined")) {
+            db.one(query, [clothing_items.search_results.product_results[i].title, clothing_items.search_results.product_results[i].thumbnail, clothing_items.search_results.product_results[i].price.value, "pants", clothing_items.search_results.product_results[i].brand])
+          // .then(msg => console.log(msg))
+          .catch(error => console.log(error));
+          }
+        }
+        return;
+      });
+
+      //populate with other pants
+      fetch("https://ecom.webscrapingapi.com/v1?q=pants&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+        clothing_items = json;
+        ci_length = 10;
+        for (i = 0; i < ci_length; i++) {
+          if (!(typeof clothing_items.search_results.product_results[i].price === "undefined")) {
+            db.one(query, [clothing_items.search_results.product_results[i].title, clothing_items.search_results.product_results[i].thumbnail, clothing_items.search_results.product_results[i].price.value, "pants", clothing_items.search_results.product_results[i].brand])
+          // .then(msg => console.log(msg))
+          .catch(error => console.log(error));
+          }
+        }
+        return;        
+      });
+
+      //populate with hats
+      fetch("https://ecom.webscrapingapi.com/v1?q=hat&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+        clothing_items = json;
+        ci_length = 10;
+        for (i = 0; i < ci_length; i++) {
+          if (!(typeof clothing_items.search_results.product_results[i].price === "undefined")) {
+            db.one(query, [clothing_items.search_results.product_results[i].title, clothing_items.search_results.product_results[i].thumbnail, clothing_items.search_results.product_results[i].price.value, "hat", clothing_items.search_results.product_results[i].brand])
+          // .then(msg => console.log(msg))
+          .catch(error => console.log(error));
+          }
+        }
+        return;        
+      });
+
+      //populate with shoes
+      fetch("https://ecom.webscrapingapi.com/v1?q=shoes&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+        clothing_items = json;
+        ci_length = 10;
+        for (i = 0; i < ci_length; i++) {
+          if (!(typeof clothing_items.search_results.product_results[i].price === "undefined")) {
+            db.one(query, [clothing_items.search_results.product_results[i].title, clothing_items.search_results.product_results[i].thumbnail, clothing_items.search_results.product_results[i].price.value, "shoes", clothing_items.search_results.product_results[i].brand])
+          // .then(msg => console.log(msg))
+          .catch(error => console.log(error));
+          }
+        }
+        return;        
       });
     }
     else{

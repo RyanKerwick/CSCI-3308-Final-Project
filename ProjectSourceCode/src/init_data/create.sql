@@ -25,7 +25,11 @@ CREATE TABLE IF NOT EXISTS outfits (
     username VARCHAR(100) NOT NULL,
     item_id_1 INT NOT NULL,
     item_id_2 INT,
+    item_id_3 INT,
+    item_id_4 INT,
     FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE,
     FOREIGN KEY (item_id_1) REFERENCES items(item_id) ON DELETE CASCADE,
-    FOREIGN KEY (item_id_2) REFERENCES items(item_id) ON DELETE CASCADE
+    FOREIGN KEY (item_id_2) REFERENCES items(item_id) ON DELETE CASCADE,
+    FOREIGN KEY (item_id_3) REFERENCES items(item_id) ON DELETE CASCADE,
+    FOREIGN KEY (item_id_4) REFERENCES items(item_id) ON DELETE CASCADE
 );
