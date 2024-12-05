@@ -126,10 +126,12 @@
                                 {{/if}} --}}
                             </p>
                             <!-- Wishlist button -->
-                            <button class="btn btn-outline-danger" id="removeWishlistItem" data-outfit-id="{{this.id}}">
-                                <span class="bi bi-trash-fill" style="color: black;"></span>
-                                Delete
-                            </button>
+                            <form action="/deleteWishlist" method="POST">
+                                <button class="btn btn-outline-danger" id="removeWishlistItem" name="item_id" value="{{this.item_id}}">
+                                    <span class="bi bi-trash-fill" style="color: black;"></span>
+                                    Delete
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

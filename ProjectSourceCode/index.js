@@ -251,6 +251,15 @@ app.post('/wishlist', (req, res) => {
     });
 });
 
+app.post('/deleteWishlist', (req, res) => {
+  const query = "DELETE FROM wishlist WHERE item_id = $1;";
+  db.none(query, [req.body.item_id])
+  .then(res.redirect('profile'))
+  .catch(err => {
+    return console.log(err);
+  })
+})
+
 /*
 outfit GET API
 Takes user to outfit creator page
