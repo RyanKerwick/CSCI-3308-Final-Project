@@ -237,18 +237,42 @@ TODO:
 */
 
 
-app.post('/wishlist', (req, res) => {
+app.post('/wishlist', async (req, res) => {
+  const query_items = "SELECT * FROM items;";
+  const query_wishlist = "SELECT items.item_id FROM items JOIN wishlist ON items.item_id = wishlist.item_id;";
   const query = "INSERT INTO wishlist (username, item_id) VALUES ($1, $2) RETURNING *;";
 
-  db.one(query, [req.session.user.username, req.body.item_id])
-    .then(() => {
-      res.redirect('discover')
-      // res.status(200).json({ success: true, message: "Wishlist item added successfully!" });
+  let alreadyWishlisted = false
+  let items;
+  try {
+    items = await db.any(query_items);
+  }
+  catch (err) {
+    return console.log(err);
+  }
+  
+  try {
+    let wishlist_items = await db.any(query_wishlist);
+    wishlist_items.forEach(id => {
+      if(id.item_id == req.body.item_id){
+        alreadyWishlisted = true;
+      }
     })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).json({ success: false, message: "Failed to add wishlist item." });
-    });
+    if(alreadyWishlisted){
+      return res.render('pages/discover', {items, message: "Already wishlisted"});
+    }
+  }
+  catch (err) {
+    return console.log(err);
+  }
+
+  try {
+    await db.one(query, [req.session.user.username, req.body.item_id])
+    return res.redirect('discover')
+  }
+  catch (err) {
+    return console.log.log(err);
+  }
 });
 
 app.post('/deleteWishlist', (req, res) => {
