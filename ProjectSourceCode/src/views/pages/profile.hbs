@@ -94,6 +94,13 @@
                     {{else}}
                         <p>No bottom outfit.</p>
                     {{/if}}
+                    <br>
+                    <form action="deleteOutfit" method="POST">
+                        <button type="submit" class="btn btn-outline-danger" id="removeOutfit" name="outfit_id" value="{{this.[0].outfit_id}}">
+                            <span class="bi bi-trash-fill" style="color: black;"></span>
+                            Delete
+                        </button>
+                    </form>
                 </div>
             {{/each}}
         {{else}}
