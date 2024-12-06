@@ -200,12 +200,12 @@ app.get('/profile', async (req, res) => {
     const outfits_4 = await t.any(query_outfit_4, [username]);
     const items = await t.any(query_wishlist, [username]);
 
-    console.log("Outfits 1: ", outfits_1);
-    console.log("Outfits 2: ", outfits_2);
-    console.log("Outfits 3: ", outfits_3);
-    console.log("Outfits 4: ", outfits_4);
+    // console.log("Outfits 1: ", outfits_1);
+    // console.log("Outfits 2: ", outfits_2);
+    // console.log("Outfits 3: ", outfits_3);
+    // console.log("Outfits 4: ", outfits_4);
     let outfits = outfits_1.map((item, index) => [item, outfits_2[index], outfits_3[index], outfits_4[index]]);
-    console.log("Overall Outfits: ", outfits);
+    // console.log("Overall Outfits: ", outfits);
     return {outfits, items};
   })
   .then(data => {
@@ -318,6 +318,17 @@ app.post('/outfit', (req, res) => {
   db.any(query, [req.session.user.username, req.body.item_ids[0], req.body.item_ids[1], req.body.item_ids[2], req.body.item_ids[3]])
   .then(() => {
     res.redirect('profile');
+  })
+  .catch(err => {
+    return console.log(err);
+  })
+})
+
+app.post('/deleteOutfit', (req, res) => {
+  const query = "DELETE FROM outfits WHERE outfit_id = $1;";
+  db.none(query, [req.body.outfit_id])
+  .then(() => {
+    return res.redirect('profile');
   })
   .catch(err => {
     return console.log(err);
