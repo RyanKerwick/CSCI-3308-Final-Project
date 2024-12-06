@@ -96,7 +96,7 @@ app.post('/register', async (req, res) => {
   //hash the password using bcrypt library
   const hash = await bcrypt.hash(req.body.password, 10);
   
-  const query = 'INSERT INTO users (username, password) values ($1, $2) returning *';
+  const query = 'INSERT INTO users (username, password) values ($1, $2) returning *;';
   db.one(query, [req.body.username, hash])
       .then(() => {
           // For testing:
@@ -162,16 +162,15 @@ app.use(auth);
 
 
 app.get('/discover', async (req, res) => {
-  const items_query = "SELECT * FROM items";
-
+  const items_query = "SELECT * FROM items WHERE name ILIKE $1;";
+  const searchTerm = req.query.search || '';
   try {
-    let items = await db.any(items_query);
+    let items = await db.any(items_query, [`%${searchTerm}%`]);
     res.render('pages/discover.hbs', {items});
   }
   catch (error) {
     return console.log(error);
   }
-
 });
 
 app.get('/logout', (req, res) => {
@@ -204,28 +203,7 @@ app.get('/profile', async (req, res) => {
     console.log("Outfits 2: ", outfits_2);
     console.log("Outfits 3: ", outfits_3);
     console.log("Outfits 4: ", outfits_4);
-    //let outfits = outfits_1.map((item, index) => [item, outfits_2[index], outfits_3[index], outfits_4[index]]);
-    var outfits = [];
-    var j = 0;
-    var k = 0;
-    var l = 0;
-    for (i = 0; i < outfits_1.length; i++) {
-      outfit = [outfits_1[i], null, null, null];
-      if (outfits_1[i].item_id_2) {
-        outfit[1] = outfits_2[j];
-        j++;
-      }
-      if (outfits_1[i].item_id_3) {
-        outfit[2] = outfits_2[k];
-        k++;
-      }
-      if (outfits_1[i].item_id_4) {
-        outfit[3] = outfits_2[l];
-        l++;
-      }
-      console.log(outfit)
-      outfits.push(outfit);
-    }
+    let outfits = outfits_1.map((item, index) => [item, outfits_2[index], outfits_3[index], outfits_4[index]]);
     console.log("Overall Outfits: ", outfits);
     return {outfits, items};
   })
@@ -394,7 +372,7 @@ async function populate_items(){
       var clothing_items;
 
       //populate with shirts
-      fetch("https://ecom.webscrapingapi.com/v1?q=shirt&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+      fetch("https://ecom.webscrapingapi.com/v1?q=shirt&type=search&amazon_domain=amazon.com&engine=amazon&api_key=LxrFvS5fASJQfwDlk2B4iyruXC9Mqjoy").then((res) => res.json()).then((json) => {
         clothing_items = json;
 
         ci_length = 10;
@@ -413,7 +391,7 @@ async function populate_items(){
       });
 
       //populate with blouses (still have "shirt" category tag but very few women's shirts come up with previous search)
-      fetch("https://ecom.webscrapingapi.com/v1?q=blouse&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+      fetch("https://ecom.webscrapingapi.com/v1?q=blouse&type=search&amazon_domain=amazon.com&engine=amazon&api_key=LxrFvS5fASJQfwDlk2B4iyruXC9Mqjoy").then((res) => res.json()).then((json) => {
         clothing_items = json;
         ci_length = 10;
         for (i = 0; i < ci_length; i++) {
@@ -427,7 +405,7 @@ async function populate_items(){
       });
 
       //populate with jeans
-      fetch("https://ecom.webscrapingapi.com/v1?q=jeans&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+      fetch("https://ecom.webscrapingapi.com/v1?q=jeans&type=search&amazon_domain=amazon.com&engine=amazon&api_key=LxrFvS5fASJQfwDlk2B4iyruXC9Mqjoy").then((res) => res.json()).then((json) => {
         clothing_items = json;
         ci_length = 10;
         for (i = 0; i < ci_length; i++) {
@@ -441,7 +419,7 @@ async function populate_items(){
       });
 
       //populate with other pants
-      fetch("https://ecom.webscrapingapi.com/v1?q=pants&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+      fetch("https://ecom.webscrapingapi.com/v1?q=pants&type=search&amazon_domain=amazon.com&engine=amazon&api_key=LxrFvS5fASJQfwDlk2B4iyruXC9Mqjoy").then((res) => res.json()).then((json) => {
         clothing_items = json;
         ci_length = 10;
         for (i = 0; i < ci_length; i++) {
@@ -455,7 +433,7 @@ async function populate_items(){
       });
 
       //populate with hats
-      fetch("https://ecom.webscrapingapi.com/v1?q=hat&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+      fetch("https://ecom.webscrapingapi.com/v1?q=hat&type=search&amazon_domain=amazon.com&engine=amazon&api_key=LxrFvS5fASJQfwDlk2B4iyruXC9Mqjoy").then((res) => res.json()).then((json) => {
         clothing_items = json;
         ci_length = 10;
         for (i = 0; i < ci_length; i++) {
@@ -469,7 +447,7 @@ async function populate_items(){
       });
 
       //populate with shoes
-      fetch("https://ecom.webscrapingapi.com/v1?q=shoes&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+      fetch("https://ecom.webscrapingapi.com/v1?q=shoes&type=search&amazon_domain=amazon.com&engine=amazon&api_key=LxrFvS5fASJQfwDlk2B4iyruXC9Mqjoy").then((res) => res.json()).then((json) => {
         clothing_items = json;
         ci_length = 10;
         for (i = 0; i < ci_length; i++) {
