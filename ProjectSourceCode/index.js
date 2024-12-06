@@ -204,7 +204,28 @@ app.get('/profile', async (req, res) => {
     console.log("Outfits 2: ", outfits_2);
     console.log("Outfits 3: ", outfits_3);
     console.log("Outfits 4: ", outfits_4);
-    let outfits = outfits_1.map((item, index) => [item, outfits_2[index], outfits_3[index], outfits_4[index]]);
+    //let outfits = outfits_1.map((item, index) => [item, outfits_2[index], outfits_3[index], outfits_4[index]]);
+    var outfits = [];
+    var j = 0;
+    var k = 0;
+    var l = 0;
+    for (i = 0; i < outfits_1.length; i++) {
+      outfit = [outfits_1[i], null, null, null];
+      if (outfits_1[i].item_id_2) {
+        outfit[1] = outfits_2[j];
+        j++;
+      }
+      if (outfits_1[i].item_id_3) {
+        outfit[2] = outfits_2[k];
+        k++;
+      }
+      if (outfits_1[i].item_id_4) {
+        outfit[3] = outfits_2[l];
+        l++;
+      }
+      console.log(outfit)
+      outfits.push(outfit);
+    }
     console.log("Overall Outfits: ", outfits);
     return {outfits, items};
   })
@@ -273,7 +294,11 @@ Adds entry to outfits table, holds up to 3 items, should add top items before bo
 
 app.post('/outfit', (req, res) => {
   const query = "INSERT INTO outfits (username, item_id_1, item_id_2, item_id_3, item_id_4) VALUES ($1, $2, $3, $4, $5) RETURNING *;";
-  db.any(query, [req.session.user.username, req.body.item_ids[0], req.body.item_ids[1], req.body.item_ids[2], req.body.item_ids[3]])
+  item_1 = req.body.item_ids[0];
+  item_2 = req.body.item_ids[1];
+  item_3 = req.body.item_ids[2];
+  item_4 = req.body.item_ids[3];
+  db.any(query, [req.session.user.username, item_1, item_2, item_3, item_4])
   .then(() => {
     res.redirect('profile');
   })

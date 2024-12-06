@@ -51,9 +51,9 @@
 <h3 style="text-align: center;">Saved Outfits</h3>
 
 <form action="/outfit" method="GET" style="margin: auto; width:20%;">
-    <button type="submit" class="btn btn-primary btn-lg">Create an Outfit</button>
+    <button type="submit" class="btn btn-primary btn-lg text-center">Create an Outfit</button>
 </form>
-
+<br>
 <div class="container">
     <div class="row">
         {{#if outfits.length}}
@@ -74,7 +74,7 @@
                             <img src="{{#if this.[1].item_img}}{{this.[1].item_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.[1].name}}">
                         </div>
                     {{else}}
-                        <p>No 2nd piece.</p>
+                        <!--<p>No 2nd piece.</p>-->
                     {{/if}}
 
                     <!-- 3rd outfit piece -->
@@ -83,7 +83,7 @@
                             <img src="{{#if this.[2].item_img}}{{this.[2].item_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.[2].name}}">
                         </div>
                     {{else}}
-                        <p>No 3rd piece.</p>
+                        <!--<p>No 3rd piece.</p>-->
                     {{/if}}
 
                     <!-- Bottom outfit -->
@@ -92,7 +92,7 @@
                             <img src="{{#if this.[3].item_img}}{{this.[3].item_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.[3].name}}">
                         </div>
                     {{else}}
-                        <p>No bottom outfit.</p>
+                        <!--<p>No bottom outfit.</p>-->
                     {{/if}}
                 </div>
             {{/each}}
