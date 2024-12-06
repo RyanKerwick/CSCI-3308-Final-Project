@@ -1,16 +1,61 @@
 <div class="container">
     <h1><b>Outfit Creator</b></h1>
-    <h3>Select up to 3 items to create your outfit.</h3>
+    <h3>Select up to 4 items to create your outfit.</h3>
 
     <form action="/outfit" method="POST" id="outfitForm">
         <!-- Submit button -->
+<<<<<<< HEAD
         <div class="text-center justify-content-center">
             <button type="submit" class="btn btn-primary" id="submitOutfit" disabled>Submit Selected Items</button>
+=======
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary" id="submitOutfit" disabled>Submit Selected Items</button><br><br>
+>>>>>>> 1555c97feae3c5fc01d2c5292fe44618d54df73a
         </div>
         <br>
         <div class="container">
             <div class="row">
+                {{#if wishlist_items.length}}
+                    <h2>Wishlisted Items:</h2>
+                    {{#each wishlist_items}}
+                        <div class="col-md-4 col-lg-3 mb-4 d-flex justify-content-center">
+                            <div class="card" style="max-width: 400px; max-height: auto">
+                                <img src="{{#if this.item_img.length}}{{this.item_img}}{{else}}/resources/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.name}}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{this.name}}</h5>
+                                    <p class="card-text">
+                                    <!-- Based on api, might be able to add description tags -->
+                                    <!-- Add a description of the item in the card text -->
+                                        {{#if this.description}}
+                                            {{this.description}}
+                                        {{else}}
+                                            No outfit description.
+                                        {{/if}}
+                                    </p>
+                                    <!-- Checkbox for selection -->
+                                    {{#if this.item_id}}
+                                        <div class="form-check">
+                                            <input 
+                                                type="checkbox" 
+                                                class="form-check-input outfit-checkbox" 
+                                                id="itemCheckbox{{@index}}" 
+                                                name="item_ids" 
+                                                value="{{this.item_id}}">
+                                            <label class="form-check-label" for="itemCheckbox{{@index}}">
+                                                Select Item
+                                            </label>
+                                        </div>
+                                    {{else}}
+                                        Unable to select item.
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                    {{/each}}
+                {{else}}
+                {{/if}}
                 {{#if items.length}}
+                    <h2>Other Items:</h2>
                     {{#each items}}
                     <div class="col-md-4 col-lg-3 mb-4 d-flex justify-content-center">
                         <div class="card" style="max-width: 400px; max-height: auto">
