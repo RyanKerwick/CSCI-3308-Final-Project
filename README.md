@@ -28,11 +28,15 @@ Users can log out.
 | 4  | Kaythy    | Liao     | arayla         |
 
 ## Technology Stack used for the project
+Our technology stack consists of Render, PostgreSQL, Express/node.js, and Handlebars/Bootstrap.
 
 ## Prerequisites to run the application - Any software that needs to be installed to run the application
+Npm must be installed in order to run the application
 
 ## Instructions on how to run the application locally.
+In order to run the application locally, NPM must be installed on the local machine, and the node dependencies must be installed by typing 'npm install' into the command line under the ProjectSourceCode directory. Additionally, Docker must be used to run the application from our container.
 
 ## How to run the tests
+To run the tests, the docker-compose.yaml command must be changed to 'npm run testandrun' and the API's must be altered to send the proper response to the test cases.
 
 ## Link to the deployed application
