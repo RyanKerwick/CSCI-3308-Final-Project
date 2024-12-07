@@ -14,6 +14,6 @@
 
 11/20
 - Database is initialized properly
-- Discover now renders items correctly in cards
+- Home now renders items correctly in cards
 - Login and register visuals updated
-- Discover visuals updated
+- Home visuals updated

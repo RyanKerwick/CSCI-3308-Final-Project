@@ -8,7 +8,7 @@
 -->
 <!-- <h1 style="text-align: center;"> abc's Profile</h1> -->
 
-
+<h1 style="text-align: center;"> {{username}}'s Profile</h1>
 <!-- User profile image on the left-->
 <div class="container text-center my-5">
     <div class="row justify-content-start align-items-center">
@@ -28,32 +28,36 @@
                     <p class="card-text" style="margin-top: 20px;">
                         Password: ******
                     </p>
+                    <!--
                     {{!-- <form action="/change-password" method="GET"> --}}
                         <button type="button" class="btn btn-primary btn-sm" style="margin-top: 30px">
                             Change Password
                         </button>
                     {{!-- </form> --}}
+                    -->
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Button aligned under profile image -->
+    <!--
     <div class="row justify-content-start">
         <div class="col-auto">
             <button type="button" class="btn btn-primary btn-sm" style="margin-left: 125px;">Update Profile Picture</button>
         </div>
     </div>
+    -->
 </div>
 
-<!-- Created id's for Wishlist buttons: "addWishlistItem" in discover and "removeWishlistItem" in profile for api functions-->
+<!-- Created id's for Wishlist buttons: "addWishlistItem" in home and "removeWishlistItem" in profile for api functions-->
 
 <h3 style="text-align: center;">Saved Outfits</h3>
 
 <form action="/outfit" method="GET" style="margin: auto; width:20%;">
-    <button type="submit" class="btn btn-primary btn-lg">Create an Outfit</button>
+    <button type="submit" class="btn btn-primary btn-lg text-center">Create an Outfit</button>
 </form>
-
+<br>
 <div class="container">
     <div class="row">
         {{#if outfits.length}}
@@ -74,7 +78,7 @@
                             <img src="{{#if this.[1].item_img}}{{this.[1].item_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.[1].name}}">
                         </div>
                     {{else}}
-                        <p>No 2nd piece.</p>
+                        <!--<p>No 2nd piece.</p>-->
                     {{/if}}
 
                     <!-- 3rd outfit piece -->
@@ -83,7 +87,7 @@
                             <img src="{{#if this.[2].item_img}}{{this.[2].item_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.[2].name}}">
                         </div>
                     {{else}}
-                        <p>No 3rd piece.</p>
+                        <!--<p>No 3rd piece.</p>-->
                     {{/if}}
 
                     <!-- Bottom outfit -->
@@ -92,7 +96,7 @@
                             <img src="{{#if this.[3].item_img}}{{this.[3].item_img}}{{else}}/img/cartoon_outfit.jpeg{{/if}}" class="card-img-top" alt="{{this.[3].name}}">
                         </div>
                     {{else}}
-                        <p>No bottom outfit.</p>
+                        <!--<p>No bottom outfit.</p>-->
                     {{/if}}
                     <br>
                     <form action="deleteOutfit" method="POST">
@@ -104,7 +108,7 @@
                 </div>
             {{/each}}
         {{else}}
-            <p>No outfits found.</p>
+            <!--<p>No outfits found.</p>-->
         {{/if}}
 
     </div>
@@ -144,7 +148,10 @@
                 </div>
                 {{/each}}
             {{else}}
-                <p>No items found.</p>
+                <!--<p>No items found.</p>-->
             {{/if}}
+            
         </div>
         </div>
+        <br><br>
+        

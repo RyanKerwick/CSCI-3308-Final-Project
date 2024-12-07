@@ -41,7 +41,7 @@ db.connect()
     console.log('Database connection successful'); // you can view this message in the docker compose logs
 
     //  ---------------------------------------------------------------------
-    //  TODO: If Database is empty, add the items from the API in a function. This shouldn't happen every time we recieve a discover Post request
+    //  TODO: If Database is empty, add the items from the API in a function. This shouldn't happen every time we recieve a home Post request
     //  I think we should not have an insert.sql file and just add from the external API if the db is empty
     //  ---------------------------------------------------------------------
 
@@ -96,7 +96,7 @@ app.post('/register', async (req, res) => {
   //hash the password using bcrypt library
   const hash = await bcrypt.hash(req.body.password, 10);
   
-  const query = 'INSERT INTO users (username, password) values ($1, $2) returning *';
+  const query = 'INSERT INTO users (username, password) values ($1, $2) returning *;';
   db.one(query, [req.body.username, hash])
       .then(() => {
           // For testing:
@@ -140,7 +140,7 @@ app.post('/login', async (req, res) => {
         //save user details in session like in lab 7
         req.session.user = user;
         req.session.save();
-        res.redirect('/discover');
+        res.redirect('/home');
     }
   } catch (err){
     console.error("Error during login:", err);
@@ -161,17 +161,16 @@ const auth = (req, res, next) => {
 app.use(auth);
 
 
-app.get('/discover', async (req, res) => {
-  const items_query = "SELECT * FROM items";
-
+app.get('/home', async (req, res) => {
+  const items_query = "SELECT * FROM items WHERE name ILIKE $1;";
+  const searchTerm = req.query.search || '';
   try {
-    let items = await db.any(items_query);
-    res.render('pages/discover.hbs', {items});
+    let items = await db.any(items_query, [`%${searchTerm}%`]);
+    res.render('pages/home.hbs', {items});
   }
   catch (error) {
     return console.log(error);
   }
-
 });
 
 app.get('/logout', (req, res) => {
@@ -200,12 +199,12 @@ app.get('/profile', async (req, res) => {
     const outfits_4 = await t.any(query_outfit_4, [username]);
     const items = await t.any(query_wishlist, [username]);
 
-    // console.log("Outfits 1: ", outfits_1);
-    // console.log("Outfits 2: ", outfits_2);
-    // console.log("Outfits 3: ", outfits_3);
-    // console.log("Outfits 4: ", outfits_4);
+    console.log("Outfits 1: ", outfits_1);
+    console.log("Outfits 2: ", outfits_2);
+    console.log("Outfits 3: ", outfits_3);
+    console.log("Outfits 4: ", outfits_4);
     let outfits = outfits_1.map((item, index) => [item, outfits_2[index], outfits_3[index], outfits_4[index]]);
-    // console.log("Overall Outfits: ", outfits);
+    console.log("Overall Outfits: ", outfits);
     return {outfits, items};
   })
   .then(data => {
@@ -229,10 +228,10 @@ app.get('/logout', (req, res) => {
 /*
 
 Wishlist POST API
-Adds entries to the wishlist table upon pressing the wishlist button on discover page.
+Adds entries to the wishlist table upon pressing the wishlist button on home page.
 TODO:
   Currently able to wishlist an item multiple times and make duplicate entries into the wishlist table. Needs fix.
-  Would like to update discover to disable the button for items already wishlisted by the user.
+  Would like to update home to disable the button for items already wishlisted by the user.
   Also would like for the page to not refresh upon adding an item to the wishlist.
 */
 
@@ -259,7 +258,7 @@ app.post('/wishlist', async (req, res) => {
       }
     })
     if(alreadyWishlisted){
-      return res.render('pages/discover', {items, message: "Already wishlisted"});
+      return res.render('pages/home', {items, message: "Already wishlisted"});
     }
   }
   catch (err) {
@@ -268,7 +267,7 @@ app.post('/wishlist', async (req, res) => {
 
   try {
     await db.one(query, [req.session.user.username, req.body.item_id])
-    return res.redirect('discover')
+    return res.redirect('home')
   }
   catch (err) {
     return console.log.log(err);
@@ -315,7 +314,11 @@ Adds entry to outfits table, holds up to 3 items, should add top items before bo
 
 app.post('/outfit', (req, res) => {
   const query = "INSERT INTO outfits (username, item_id_1, item_id_2, item_id_3, item_id_4) VALUES ($1, $2, $3, $4, $5) RETURNING *;";
-  db.any(query, [req.session.user.username, req.body.item_ids[0], req.body.item_ids[1], req.body.item_ids[2], req.body.item_ids[3]])
+  item_1 = req.body.item_ids[0];
+  item_2 = req.body.item_ids[1];
+  item_3 = req.body.item_ids[2];
+  item_4 = req.body.item_ids[3];
+  db.any(query, [req.session.user.username, item_1, item_2, item_3, item_4])
   .then(() => {
     res.redirect('profile');
   })
@@ -369,7 +372,7 @@ async function populate_items(){
       var clothing_items;
 
       //populate with shirts
-      fetch("https://ecom.webscrapingapi.com/v1?q=shirt&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+      fetch("https://ecom.webscrapingapi.com/v1?q=shirt&type=search&amazon_domain=amazon.com&engine=amazon&api_key=LxrFvS5fASJQfwDlk2B4iyruXC9Mqjoy").then((res) => res.json()).then((json) => {
         clothing_items = json;
 
         ci_length = 10;
@@ -388,7 +391,7 @@ async function populate_items(){
       });
 
       //populate with blouses (still have "shirt" category tag but very few women's shirts come up with previous search)
-      fetch("https://ecom.webscrapingapi.com/v1?q=blouse&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+      fetch("https://ecom.webscrapingapi.com/v1?q=blouse&type=search&amazon_domain=amazon.com&engine=amazon&api_key=LxrFvS5fASJQfwDlk2B4iyruXC9Mqjoy").then((res) => res.json()).then((json) => {
         clothing_items = json;
         ci_length = 10;
         for (i = 0; i < ci_length; i++) {
@@ -402,7 +405,7 @@ async function populate_items(){
       });
 
       //populate with jeans
-      fetch("https://ecom.webscrapingapi.com/v1?q=jeans&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+      fetch("https://ecom.webscrapingapi.com/v1?q=jeans&type=search&amazon_domain=amazon.com&engine=amazon&api_key=LxrFvS5fASJQfwDlk2B4iyruXC9Mqjoy").then((res) => res.json()).then((json) => {
         clothing_items = json;
         ci_length = 10;
         for (i = 0; i < ci_length; i++) {
@@ -416,7 +419,7 @@ async function populate_items(){
       });
 
       //populate with other pants
-      fetch("https://ecom.webscrapingapi.com/v1?q=pants&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+      fetch("https://ecom.webscrapingapi.com/v1?q=pants&type=search&amazon_domain=amazon.com&engine=amazon&api_key=LxrFvS5fASJQfwDlk2B4iyruXC9Mqjoy").then((res) => res.json()).then((json) => {
         clothing_items = json;
         ci_length = 10;
         for (i = 0; i < ci_length; i++) {
@@ -430,7 +433,7 @@ async function populate_items(){
       });
 
       //populate with hats
-      fetch("https://ecom.webscrapingapi.com/v1?q=hat&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+      fetch("https://ecom.webscrapingapi.com/v1?q=hat&type=search&amazon_domain=amazon.com&engine=amazon&api_key=LxrFvS5fASJQfwDlk2B4iyruXC9Mqjoy").then((res) => res.json()).then((json) => {
         clothing_items = json;
         ci_length = 10;
         for (i = 0; i < ci_length; i++) {
@@ -444,7 +447,7 @@ async function populate_items(){
       });
 
       //populate with shoes
-      fetch("https://ecom.webscrapingapi.com/v1?q=shoes&type=search&amazon_domain=amazon.com&engine=amazon&api_key=xBPqUqUmzI7IB3w0LfPR7ZStaa4y0L1z").then((res) => res.json()).then((json) => {
+      fetch("https://ecom.webscrapingapi.com/v1?q=shoes&type=search&amazon_domain=amazon.com&engine=amazon&api_key=LxrFvS5fASJQfwDlk2B4iyruXC9Mqjoy").then((res) => res.json()).then((json) => {
         clothing_items = json;
         ci_length = 10;
         for (i = 0; i < ci_length; i++) {
