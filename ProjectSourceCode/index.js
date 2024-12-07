@@ -228,10 +228,10 @@ app.get('/logout', (req, res) => {
 /*
 
 Wishlist POST API
-Adds entries to the wishlist table upon pressing the wishlist button on home/discover page.
+Adds entries to the wishlist table upon pressing the wishlist button on home page.
 TODO:
   Currently able to wishlist an item multiple times and make duplicate entries into the wishlist table. Needs fix.
-  Would like to update home/discover to disable the button for items already wishlisted by the user.
+  Would like to update home to disable the button for items already wishlisted by the user.
   Also would like for the page to not refresh upon adding an item to the wishlist.
 */
 

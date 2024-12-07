@@ -20,7 +20,7 @@ Test environment:
 Test results:
     -User session is set
 
-==Discover==
+==Home==
 Test cases:
     -Users can search items by name
     -Users can toggle "color" filter to search for items

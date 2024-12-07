@@ -8,7 +8,7 @@ Users can create an account with a unique username and password.
 Users can login to their profile.
 ### Profile: 
 Users can view their username, set and view their profile picture, and see the clothes they’ve wishlisted and outfits they’ve saved.
-### Discover: 
+### Home: 
 Users can search for clothing and accessories by price range, color, type of clothing and can wishlist clothes that they like.
 ### Outfit Creator: 
 Users are provided recommendations of pieces of clothing based on the clothes they’ve wishlisted. They can assemble an outfit and save it to their account.
