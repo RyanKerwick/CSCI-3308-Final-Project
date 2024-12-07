@@ -41,7 +41,7 @@ db.connect()
     console.log('Database connection successful'); // you can view this message in the docker compose logs
 
     //  ---------------------------------------------------------------------
-    //  TODO: If Database is empty, add the items from the API in a function. This shouldn't happen every time we recieve a discover Post request
+    //  TODO: If Database is empty, add the items from the API in a function. This shouldn't happen every time we recieve a home Post request
     //  I think we should not have an insert.sql file and just add from the external API if the db is empty
     //  ---------------------------------------------------------------------
 
@@ -140,7 +140,7 @@ app.post('/login', async (req, res) => {
         //save user details in session like in lab 7
         req.session.user = user;
         req.session.save();
-        res.redirect('/discover');
+        res.redirect('/home');
     }
   } catch (err){
     console.error("Error during login:", err);
@@ -161,12 +161,12 @@ const auth = (req, res, next) => {
 app.use(auth);
 
 
-app.get('/discover', async (req, res) => {
+app.get('/home', async (req, res) => {
   const items_query = "SELECT * FROM items WHERE name ILIKE $1;";
   const searchTerm = req.query.search || '';
   try {
     let items = await db.any(items_query, [`%${searchTerm}%`]);
-    res.render('pages/discover.hbs', {items});
+    res.render('pages/home.hbs', {items});
   }
   catch (error) {
     return console.log(error);
@@ -228,10 +228,10 @@ app.get('/logout', (req, res) => {
 /*
 
 Wishlist POST API
-Adds entries to the wishlist table upon pressing the wishlist button on discover page.
+Adds entries to the wishlist table upon pressing the wishlist button on home/discover page.
 TODO:
   Currently able to wishlist an item multiple times and make duplicate entries into the wishlist table. Needs fix.
-  Would like to update discover to disable the button for items already wishlisted by the user.
+  Would like to update home/discover to disable the button for items already wishlisted by the user.
   Also would like for the page to not refresh upon adding an item to the wishlist.
 */
 
@@ -258,7 +258,7 @@ app.post('/wishlist', async (req, res) => {
       }
     })
     if(alreadyWishlisted){
-      return res.render('pages/discover', {items, message: "Already wishlisted"});
+      return res.render('pages/home', {items, message: "Already wishlisted"});
     }
   }
   catch (err) {
@@ -267,7 +267,7 @@ app.post('/wishlist', async (req, res) => {
 
   try {
     await db.one(query, [req.session.user.username, req.body.item_id])
-    return res.redirect('discover')
+    return res.redirect('home')
   }
   catch (err) {
     return console.log.log(err);
