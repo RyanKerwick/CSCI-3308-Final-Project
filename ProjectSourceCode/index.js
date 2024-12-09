@@ -238,10 +238,11 @@ TODO:
 
 app.post('/wishlist', async (req, res) => {
   const query_items = "SELECT * FROM items;";
-  const query_wishlist = "SELECT items.item_id FROM items JOIN wishlist ON items.item_id = wishlist.item_id;";
+  /* const query_wishlist = "SELECT items.item_id FROM items JOIN wishlist ON items.item_id = wishlist.item_id;"; */
+  const query_wishlist = "SELECT items.item_id FROM items JOIN wishlist ON items.item_id = wishlist.item_id WHERE wishlist.username = $1;";
   const query = "INSERT INTO wishlist (username, item_id) VALUES ($1, $2) RETURNING *;";
 
-  let alreadyWishlisted = false
+  let alreadyWishlisted = false;
   let items;
   try {
     items = await db.any(query_items);
@@ -251,7 +252,8 @@ app.post('/wishlist', async (req, res) => {
   }
   
   try {
-    let wishlist_items = await db.any(query_wishlist);
+    /* let wishlist_items = await db.any(query_wishlist); */
+    let wishlist_items = await db.any(query_wishlist, [req.session.user.username]);
     wishlist_items.forEach(id => {
       if(id.item_id == req.body.item_id){
         alreadyWishlisted = true;
@@ -270,13 +272,15 @@ app.post('/wishlist', async (req, res) => {
     return res.redirect('home')
   }
   catch (err) {
-    return console.log.log(err);
+    return console.log(err);
   }
 });
 
 app.post('/deleteWishlist', (req, res) => {
-  const query = "DELETE FROM wishlist WHERE item_id = $1;";
-  db.none(query, [req.body.item_id])
+  /*const query = "DELETE FROM wishlist WHERE item_id = $1;";*/
+  const query = "DELETE FROM wishlist WHERE item_id = $1 AND username=$2;";
+  /*db.none(query, [req.body.item_id])*/
+  db.none(query, [req.body.item_id, req.session.user.username])
   .then(res.redirect('profile'))
   .catch(err => {
     return console.log(err);
