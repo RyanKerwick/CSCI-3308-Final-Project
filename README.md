@@ -28,7 +28,7 @@ Users can log out.
 Our technology stack consists of Render, PostgreSQL, Express/node.js, and Handlebars/Bootstrap.
 
 ## Prerequisites to run the application - Any software that needs to be installed to run the application
-NPM and its dependencies as well as Docker need to be installed to run the application locally. Otherwise, the user can simply click the Render link, no installations are necessary.
+NPM, the node dependencies, and Docker need to be installed to run the application locally. Otherwise, the user can simply click the Render link, in which case no installations are necessary.
 
 ## Instructions on how to run the application locally.
 In order to run the application locally, NPM must be installed on the local machine, and the node dependencies must be installed by typing 'npm install' into the command line under the ProjectSourceCode directory. Additionally, Docker must be used to run the application from our container.
